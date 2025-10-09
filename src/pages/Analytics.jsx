@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react"; // ✅ Import React
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRealtimeRequests } from "../useRealtimeRequests";
 import { supabase } from "../supabaseClient";
@@ -5,23 +6,38 @@ import { supabase } from "../supabaseClient";
 const Analytics = () => {
   const user = useUser();
   const requests = useRealtimeRequests(user?.id);
+  const [localRequests, setLocalRequests] = useState([]);
+
+  // Sync localRequests with real-time requests
+  useEffect(() => {
+    setLocalRequests(requests);
+  }, [requests]);
 
   const updateStatus = async (id, newStatus) => {
-    if (!user) return;
+    // Optimistic update
+    setLocalRequests((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, status: newStatus } : r))
+    );
+
+    // Send update to Supabase
     const { error } = await supabase
       .from("review_requests")
       .update({ status: newStatus })
       .eq("id", id)
       .eq("user_id", user.id);
 
-    if (error) console.error("Error updating status:", error);
+    if (error) {
+      console.error("Error updating status:", error);
+      // Rollback if error
+      setLocalRequests(requests);
+    }
   };
 
   const exportCSV = () => {
-    if (!requests.length) return;
+    if (!localRequests.length) return;
 
     const headers = ["Name", "Phone", "Status", "Date Sent"];
-    const rows = requests.map((r) => [
+    const rows = localRequests.map((r) => [
       r.name,
       r.phone,
       r.status,
@@ -34,17 +50,16 @@ const Analytics = () => {
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
     link.setAttribute(
       "download",
       `review_requests_${new Date().toISOString().split("T")[0]}.csv`
     );
+    link.setAttribute("href", encodedUri);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  // Not signed in
   if (!user) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
@@ -52,9 +67,9 @@ const Analytics = () => {
           <h3>Please sign in to view analytics</h3>
           <button
             className="btn btn-primary mt-3"
-            onClick={async () => {
-              supabase.auth.signInWithOAuth({ provider: "google" });
-            }}
+            onClick={() =>
+              supabase.auth.signInWithOAuth({ provider: "google" })
+            }
           >
             Sign In with Google
           </button>
@@ -63,12 +78,11 @@ const Analytics = () => {
     );
   }
 
-  // Signed in
   return (
     <div className="container py-5">
       <h1 className="mb-4">Analytics</h1>
 
-      {requests.length > 0 && (
+      {localRequests.length > 0 && (
         <div className="mb-3 text-end">
           <button className="btn btn-primary" onClick={exportCSV}>
             Export CSV
@@ -88,8 +102,8 @@ const Analytics = () => {
             </tr>
           </thead>
           <tbody>
-            {requests.length > 0 ? (
-              requests.map((req) => (
+            {localRequests.length > 0 ? (
+              localRequests.map((req) => (
                 <tr key={req.id}>
                   <td>{req.name}</td>
                   <td>{req.phone}</td>
