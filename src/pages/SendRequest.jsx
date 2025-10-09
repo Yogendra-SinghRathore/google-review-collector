@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { supabase } from "../supabaseClient";
 import "./SendRequest.css";
 
 function SendRequest() {
   const user = useUser();
+  const supabaseClient = useSupabaseClient();
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
@@ -12,16 +14,37 @@ function SendRequest() {
   const [toast, setToast] = useState(false);
   const [previewMessage, setPreviewMessage] = useState("");
 
-  const businessPlaceId = "YOUR_BUSINESS_PLACE_ID"; // Replace with your real Place ID
+  const [businessName, setBusinessName] = useState("");
+  const [businessLink, setBusinessLink] = useState("");
+
+  // Fetch business info from DB
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchBusinessInfo = async () => {
+      const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("business_name, business_link")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (error) console.error("Error fetching business info:", error);
+      if (data) {
+        setBusinessName(data.business_name || "");
+        setBusinessLink(data.business_link || "");
+      }
+    };
+
+    fetchBusinessInfo();
+  }, [user, supabaseClient]);
 
   // Live preview update
   useEffect(() => {
-    const reviewLink = `https://search.google.com/local/writereview?placeid=${businessPlaceId}`;
     const text = message
       ? message
-      : `Hi ${name || "[Customer Name]"}, please leave us a review!`;
-    setPreviewMessage(`${text} ${reviewLink}`);
-  }, [name, message]);
+      : `Hi ${name || "[Customer Name]"}, please leave a review for\n${businessName || "[Business Name]"}\n${businessLink || "https://your-default-review-link.com"}`;
+    setPreviewMessage(text);
+  }, [name, message, businessName, businessLink]);
 
   // Validate input
   const validateForm = () => {
@@ -43,12 +66,10 @@ function SendRequest() {
     if (!user) return;
     if (!validateForm()) return;
 
-    const reviewLink = `https://search.google.com/local/writereview?placeid=${businessPlaceId}`;
-    const textMessage = message
-      ? message
-      : `Hi ${name}, please leave us a review!`;
-    const encodedMessage = encodeURIComponent(`${textMessage} ${reviewLink}`);
-    const link = `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodedMessage}`;
+    // Build WhatsApp link with proper line breaks
+    const textWithLineBreaks = `${name ? `Hi ${name}, please leave a review for` : "Hi [Customer Name], please leave a review for"}%0A${businessName || "[Business Name]"}%0A${businessLink || "https://your-default-review-link.com"}`;
+
+    const link = `https://wa.me/${phone.replace(/\D/g, "")}?text=${textWithLineBreaks}`;
     setWaLink(link);
 
     const { error } = await supabase.from("review_requests").insert([
@@ -56,7 +77,7 @@ function SendRequest() {
         user_id: user.id,
         name,
         phone,
-        message,
+        message: `Hi ${name}, please leave a review for ${businessName || "[Business Name]"}!`,
         status: "Pending",
       },
     ]);
@@ -71,6 +92,7 @@ function SendRequest() {
     setTimeout(() => setToast(false), 3000);
     setName("");
     setPhone("");
+    setMessage("");
   };
 
   const handleCopy = () => {
@@ -78,7 +100,6 @@ function SendRequest() {
     alert("WhatsApp link copied to clipboard!");
   };
 
-  // Not signed in
   if (!user) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
