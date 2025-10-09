@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useUser } from "@supabase/auth-helpers-react";
-import { supabase } from "../supabaseClient";
+import { signInWithGoogle, signOut } from "../auth";
 
 function Navbar() {
   const user = useUser();
@@ -9,29 +9,10 @@ function Navbar() {
   const closeMenu = () => {
     const navbar = document.getElementById("navbarNav");
     if (navbar && navbar.classList.contains("show")) {
-      const collapse = new window.bootstrap.Collapse(navbar, {
-        toggle: false,
-      });
+      const collapse = new window.bootstrap.Collapse(navbar, { toggle: false });
       collapse.hide();
     }
   };
-
-  const handleSignOut = async () => {
-  await supabase.auth.signOut();
-  localStorage.removeItem("supabase.auth.token"); // clear cached session
-  navigate("/"); // redirect to login or home page
-};
-
-const handleSignIn = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: window.location.origin, // dynamically uses current domain
-      queryParams: { prompt: "select_account" }, // forces Google account chooser
-    },
-  });
-  if (error) console.error("Error during sign-in:", error.message);
-};
 
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-primary sticky-top">
@@ -54,66 +35,26 @@ const handleSignIn = async () => {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-center">
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) =>
-                  "nav-link" + (isActive ? " active" : "")
-                }
-                to="/"
-                end
-                onClick={closeMenu}
-              >
-                Home
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) =>
-                  "nav-link" + (isActive ? " active" : "")
-                }
-                to="/dashboard"
-                onClick={closeMenu}
-              >
-                Dashboard
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) =>
-                  "nav-link" + (isActive ? " active" : "")
-                }
-                to="/send"
-                onClick={closeMenu}
-              >
-                Send Request
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) =>
-                  "nav-link" + (isActive ? " active" : "")
-                }
-                to="/analytics"
-                onClick={closeMenu}
-              >
-                Analytics
-              </NavLink>
-            </li>
+            {["/", "/dashboard", "/send", "/analytics"].map((path, idx) => (
+              <li className="nav-item" key={idx}>
+                <NavLink
+                  className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                  to={path}
+                  onClick={closeMenu}
+                  end={path === "/"}
+                >
+                  {["Home", "Dashboard", "Send Request", "Analytics"][idx]}
+                </NavLink>
+              </li>
+            ))}
 
-            {/* Supabase Auth Buttons */}
             <li className="nav-item ms-3">
               {!user ? (
-                <button
-                  className="btn btn-light btn-sm"
-                  onClick={handleSignIn}
-                >
+                <button className="btn btn-light btn-sm" onClick={signInWithGoogle}>
                   Sign In
                 </button>
               ) : (
-                <button
-                  className="btn btn-outline-light btn-sm"
-                  onClick={handleSignOut}
-                >
+                <button className="btn btn-outline-light btn-sm" onClick={() => signOut(navigate)}>
                   Sign Out
                 </button>
               )}
