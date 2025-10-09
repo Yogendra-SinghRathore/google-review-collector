@@ -1,0 +1,67 @@
+/* Container spacing */
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Form inputs for mobile */
+.form-control-lg {
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Buttons full-width on mobile */
+.btn-lg {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border: none;
+  color: #fff;
+}
+
+.btn-success {
+  background-color: #198754;
+  border: none;
+  color: #fff;
+}
+
+.btn-outline-secondary {
+  border: 2px solid #6c757d;
+  color: #6c757d;
+  background-color: #fff;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transition: 0.3s;
+}
+
+/* Toast confirmation */
+.toast-confirmation {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #0d6efd;
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  text-align: center;
+}
+/* WhatsApp Message Preview */
+.preview-message .preview-box {
+  background-color: #f1f3f5;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: #333;
+  font-size: 0.95rem;
+  word-break: break-word;
+}

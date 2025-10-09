@@ -1,0 +1,190 @@
+/* Home.css - Mobile-First Polished Version */
+
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Hero Text & Logo Top */
+.hero-text-top {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero-text-top h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.hero-text-top p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+/* Hero Illustration */
+.hero-illustration {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn-lg {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  color: #fff;
+  border: none;
+}
+
+.btn-outline-primary {
+  color: #0d6efd;
+  border: 2px solid #0d6efd;
+  background-color: #fff;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transition: 0.3s;
+}
+
+/* Save button (green success style) */
+.btn-save {
+  border: 2px solid #198754;
+  color: #198754;
+  background-color: transparent;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: 0.3s;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.btn-save:hover {
+  background-color: #198754;
+  color: #fff;
+}
+
+/* Full-width buttons for mobile */
+@media (max-width: 768px) {
+  .btn-lg {
+    width: 100%;
+  }
+}
+
+/* Cards (How It Works & Testimonials) */
+.step-card,
+.testimonial-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Section headings */
+h2.h5 {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 1rem;
+}
+
+/* Paragraphs inside cards */
+section p {
+  color: #555;
+  margin: 0.25rem 0 0;
+}
+
+/* Gap between stacked cards */
+.d-flex.flex-column.gap-3 > .step-card,
+.d-flex.flex-column.gap-3 > .testimonial-card {
+  margin-bottom: 1rem;
+}
+
+/* Testimonials small text */
+small {
+  display: block;
+  margin-top: 0.01rem;
+  color: #888;
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+/* Section spacing */
+section.mb-5 {
+  margin-bottom: 3rem;
+}
+
+/* Background for the page */
+body {
+  background-color: #f9f9f9;
+}
+
+/* Center text for About & Testimonials sections */
+section.text-center {
+  text-align: center;
+}
+
+/* Business Inputs */
+.business-inputs {
+  margin-bottom: 1rem;
+}
+
+.business-inputs label {
+  font-weight: 500;
+  display: block;
+  color: #222;
+  margin-bottom: 0.25rem;
+}
+
+.business-inputs input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+}
+
+.business-inputs small {
+  display: block;
+  text-align: left; /* left-align description */
+  color: #555;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* Toast Confirmation */
+.toast-confirmation {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #198754;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+  animation: fadein 0.3s, fadeout 0.3s 2.5s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes fadeout {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+}
