@@ -17,16 +17,21 @@ function Navbar() {
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
-  };
+  await supabase.auth.signOut();
+  localStorage.removeItem("supabase.auth.token"); // clear cached session
+  navigate("/"); // redirect to login or home page
+};
 
-  const handleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-    if (error) console.error("Error during sign-in:", error.message);
-  };
+const handleSignIn = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin, // dynamically uses current domain
+      queryParams: { prompt: "select_account" }, // forces Google account chooser
+    },
+  });
+  if (error) console.error("Error during sign-in:", error.message);
+};
 
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-primary sticky-top">
