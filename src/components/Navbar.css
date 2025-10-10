@@ -2,7 +2,7 @@
     border-top: 1px solid gainsboro;
 }
 .navbar .mobile_navbar_links{
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 .navbar .mobile_navbar_links.active{
     background-color: #0D6EFD; border-radius: 8px;
