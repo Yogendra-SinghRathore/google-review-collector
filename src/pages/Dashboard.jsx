@@ -14,6 +14,7 @@ const Dashboard = () => {
   if (!user) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
+
         <div className="text-center">
           <h3>Please sign in to view your dashboard</h3>
           <button
