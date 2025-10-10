@@ -4,3 +4,7 @@
 .navbar .mobile_navbar_links{
     font-size: 1em;
 }
+.navbar .mobile_navbar_links.active{
+    background-color: #0D6EFD; border-radius: 20px;
+    padding: 0.1em 0.5em; font-size: 0.95em; color: white;
+}

@@ -63,7 +63,7 @@ function Navbar() {
       </nav>
 
       {/* Mobile Bottom Navbar (Links) */}
-      <nav className="mobile_navbar navbar navbar-dark bg-white  fixed-bottom d-flex d-sm-none justify-content-around py-3">
+      <nav className="mobile_navbar navbar navbar-dark bg-white  fixed-bottom d-flex align-items-center d-sm-none justify-content-around py-3">
         {navLinks.map(({ path, label }) => (
           <NavLink
             key={path}
