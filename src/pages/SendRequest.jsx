@@ -10,7 +10,6 @@ function SendRequest() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
-  const [waLink, setWaLink] = useState("");
   const [toast, setToast] = useState(false);
   const [previewMessage, setPreviewMessage] = useState("");
 
@@ -66,12 +65,12 @@ function SendRequest() {
     if (!user) return;
     if (!validateForm()) return;
 
-    // Build WhatsApp link with proper line breaks
+    // Build WhatsApp message with line breaks
     const textWithLineBreaks = `${name ? `Hi ${name}, please leave a review for` : "Hi [Customer Name], please leave a review for"}%0A${businessName || "[Business Name]"}%0A${businessLink || "https://your-default-review-link.com"}`;
 
-    const link = `https://wa.me/${phone.replace(/\D/g, "")}?text=${textWithLineBreaks}`;
-    setWaLink(link);
+    const waLink = `https://wa.me/${phone.replace(/\D/g, "")}?text=${textWithLineBreaks}`;
 
+    // Save request to Supabase
     const { error } = await supabase.from("review_requests").insert([
       {
         user_id: user.id,
@@ -88,16 +87,17 @@ function SendRequest() {
       return;
     }
 
+    // Open WhatsApp in a new tab
+    window.open(waLink, "_blank");
+
+    // Show toast
     setToast(true);
     setTimeout(() => setToast(false), 3000);
+
+    // Clear form
     setName("");
     setPhone("");
     setMessage("");
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(waLink);
-    alert("WhatsApp link copied to clipboard!");
   };
 
   if (!user) {
@@ -163,32 +163,10 @@ function SendRequest() {
           <div className="preview-box">{previewMessage}</div>
         </div>
 
-        <button type="submit" className="btn btn-primary btn-lg w-100">
-          Generate WhatsApp Link
+        <button type="submit" className="btn btn-success btn-lg w-100">
+          Send via WhatsApp
         </button>
       </form>
-
-      {waLink && (
-        <div className="mt-4 text-center">
-          <p>Click below to send the review request via WhatsApp:</p>
-          <div className="d-flex flex-column gap-2">
-            <a
-              href={waLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-success btn-lg w-100"
-            >
-              Send via WhatsApp
-            </a>
-            <button
-              className="btn btn-outline-secondary btn-lg w-100"
-              onClick={handleCopy}
-            >
-              Copy WhatsApp Link
-            </button>
-          </div>
-        </div>
-      )}
 
       {toast && <div className="toast-confirmation">Request saved successfully!</div>}
     </div>
