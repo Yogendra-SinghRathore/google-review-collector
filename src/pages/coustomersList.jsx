@@ -1,9 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { supabase } from "../supabaseClient";
+
 const CustomersList = () => {
   const user = useUser();
+  const supabaseClient = useSupabaseClient();
   const [customers, setCustomers] = useState([]);
+  const [businessName, setBusinessName] = useState("");
+  const [businessLink, setBusinessLink] = useState("");
+
+  // Fetch business info
+  useEffect(() => {
+    if (!user) return;
+    const fetchBusinessInfo = async () => {
+      const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("business_name, business_link")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (error) console.error("Error fetching business info:", error);
+      if (data) {
+        setBusinessName(data.business_name || "");
+        setBusinessLink(data.business_link || "");
+      }
+    };
+    fetchBusinessInfo();
+  }, [user, supabaseClient]);
 
   // Fetch customers from Supabase
   const fetchCustomers = async () => {
@@ -25,13 +48,14 @@ const CustomersList = () => {
     fetchCustomers();
   }, [user]);
 
-  // Send WhatsApp and move to review_requests
+  // Send WhatsApp message and move to review_requests
   const handleSend = async (customer) => {
     if (!user) return;
 
+    // Build message including business link
     const textMessage = customer.message
       ? customer.message
-      : `Hi ${customer.name}, please leave a review!`;
+      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${businessLink}`;
 
     const waLink = `https://wa.me/${customer.phone}?text=${encodeURIComponent(
       textMessage
@@ -54,7 +78,7 @@ const CustomersList = () => {
       return;
     }
 
-    // Remove from customers
+    // Remove from customers table
     const { error: deleteError } = await supabase
       .from("customers")
       .delete()
@@ -79,9 +103,7 @@ const CustomersList = () => {
           <h3>Please sign in to view customers</h3>
           <button
             className="btn btn-primary mt-3"
-            onClick={() =>
-              supabase.auth.signInWithOAuth({ provider: "google" })
-            }
+            onClick={() => supabase.auth.signInWithOAuth({ provider: "google" })}
           >
             Sign In with Google
           </button>
@@ -144,4 +166,3 @@ const CustomersList = () => {
 };
 
 export default CustomersList;
-

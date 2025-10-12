@@ -38,14 +38,13 @@ function SendRequest() {
     fetchBusinessInfo();
   }, [user, supabaseClient]);
 
-  // ✅ Handle phone input (only allow digits while typing)
+  // Handle phone input (digits only)
   const handlePhoneChange = (e) => {
-    const input = e.target.value;
-    const cleaned = input.replace(/[^\d]/g, "");
+    const cleaned = e.target.value.replace(/[^\d]/g, "");
     setPhone(cleaned);
   };
 
-  // ✅ Normalize phone on submit/save
+  // Normalize phone for sending
   const getFinalPhone = (input) => {
     if (!input) return "";
     let cleaned = input.replace(/[^\d]/g, "");
@@ -82,20 +81,21 @@ function SendRequest() {
     if (!user || !validateForm()) return;
 
     const finalPhone = getFinalPhone(phone);
+    const textWithLineBreaks = message
+      ? message
+      : `Hi ${name}, You recently visited, please leave a review for\n${businessName}\n${businessLink}`;
+
     const waLink = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
-      message ||
-        `Hi ${name}, please leave a review for ${
-          businessName || "[Business Name]"
-        }!`
+      textWithLineBreaks
     )}`;
 
+    // Save to review_requests
     const { error } = await supabase.from("review_requests").insert([
       {
         user_id: user.id,
         name,
         phone: finalPhone,
-        message:
-          message || `Hi ${name}, please leave a review for ${businessName}!`,
+        message: textWithLineBreaks,
         status: "Pending",
       },
     ]);
@@ -110,6 +110,7 @@ function SendRequest() {
     setToastMsg("Request sent successfully!");
     setToast(true);
     setTimeout(() => setToast(false), 3000);
+
     setName("");
     setPhone("");
     setMessage("");
@@ -139,6 +140,7 @@ function SendRequest() {
     setToastMsg("Customer saved successfully!");
     setToast(true);
     setTimeout(() => setToast(false), 3000);
+
     setName("");
     setPhone("");
     setMessage("");
@@ -206,13 +208,13 @@ function SendRequest() {
           />
         </div>
 
-        {/* Preview */}
+        {/* Live Preview */}
         <div className="mb-3 preview-message">
           <label className="form-label">Message Preview:</label>
           <div className="preview-box">{previewMessage}</div>
         </div>
 
-        {/* Buttons one below another */}
+        {/* Buttons */}
         <div className="d-flex flex-column gap-3 mt-3">
           <button
             type="button"
@@ -231,7 +233,7 @@ function SendRequest() {
           </button>
         </div>
 
-        {/* View Customer List button */}
+        {/* View Customer List */}
         <div className="text-center mt-4">
           <button
             type="button"
