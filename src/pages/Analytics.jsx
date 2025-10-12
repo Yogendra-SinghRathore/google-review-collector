@@ -79,7 +79,7 @@ const Analytics = () => {
   }
 
   return (
-    <div className="container py-5">
+    <div className="container py-4">
       <h1 className="mb-4">Analytics</h1>
 
       {localRequests.length > 0 && (

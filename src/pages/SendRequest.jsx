@@ -2,24 +2,26 @@ import { useState, useEffect } from "react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { supabase } from "../supabaseClient";
 import "./SendRequest.css";
+import { useNavigate } from "react-router-dom";
 
 function SendRequest() {
   const user = useUser();
   const supabaseClient = useSupabaseClient();
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [toast, setToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
   const [previewMessage, setPreviewMessage] = useState("");
 
   const [businessName, setBusinessName] = useState("");
   const [businessLink, setBusinessLink] = useState("");
 
-  // ✅ Fetch business info from DB
+  // Fetch business info
   useEffect(() => {
     if (!user) return;
-
     const fetchBusinessInfo = async () => {
       const { data, error } = await supabaseClient
         .from("profiles")
@@ -33,34 +35,26 @@ function SendRequest() {
         setBusinessLink(data.business_link || "");
       }
     };
-
     fetchBusinessInfo();
   }, [user, supabaseClient]);
 
-  // ✅ Normalize phone input (remove spaces, +, -, (), etc.)
-  const normalizePhone = (input) => {
+  // ✅ Handle phone input (only allow digits while typing)
+  const handlePhoneChange = (e) => {
+    const input = e.target.value;
+    const cleaned = input.replace(/[^\d]/g, "");
+    setPhone(cleaned);
+  };
+
+  // ✅ Normalize phone on submit/save
+  const getFinalPhone = (input) => {
     if (!input) return "";
-    let cleaned = input.replace(/[^\d]/g, ""); // keep only digits
-
-    // Remove leading 0
+    let cleaned = input.replace(/[^\d]/g, "");
     if (cleaned.startsWith("0")) cleaned = cleaned.slice(1);
-
-    // Add default India code if only 10 digits
-    if (cleaned.length === 10) {
-      cleaned = "91" + cleaned;
-    }
-
+    if (cleaned.length === 10) cleaned = "91" + cleaned;
     return cleaned;
   };
 
-  // ✅ Handle phone input changes
-  const handlePhoneChange = (e) => {
-    const input = e.target.value;
-    const normalized = normalizePhone(input);
-    setPhone(normalized);
-  };
-
-  // ✅ Live preview update
+  // Live preview
   useEffect(() => {
     const text = message
       ? message
@@ -70,7 +64,7 @@ function SendRequest() {
     setPreviewMessage(text);
   }, [name, message, businessName, businessLink]);
 
-  // ✅ Validate input
+  // Validate input
   const validateForm = () => {
     if (!name || name.trim().length < 2) {
       alert("Please enter a valid name (at least 2 characters).");
@@ -83,56 +77,73 @@ function SendRequest() {
     return true;
   };
 
-  // ✅ Submit form
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!user) return;
-    if (!validateForm()) return;
+  // Send via WhatsApp
+  const handleSend = async () => {
+    if (!user || !validateForm()) return;
 
-    const finalPhone = normalizePhone(phone);
+    const finalPhone = getFinalPhone(phone);
+    const waLink = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
+      message ||
+        `Hi ${name}, please leave a review for ${
+          businessName || "[Business Name]"
+        }!`
+    )}`;
 
-    // Build WhatsApp message
-    const textWithLineBreaks = `${
-      name ? `Hi ${name}, You Recenlty Visited please leave a review for` : "Hi [Customer Name], please leave a review for"
-    }%0A${businessName || "[Business Name]"}%0A${
-      businessLink || "https://your-default-review-link.com"
-    }`;
-
-    const waLink = `https://wa.me/${finalPhone}?text=${textWithLineBreaks}`;
-
-    // Save request to Supabase
     const { error } = await supabase.from("review_requests").insert([
       {
         user_id: user.id,
         name,
         phone: finalPhone,
-        message: `Hi ${name}, please leave a review for ${
-          businessName || "[Business Name]"
-        }!`,
+        message:
+          message || `Hi ${name}, please leave a review for ${businessName}!`,
         status: "Pending",
       },
     ]);
 
     if (error) {
       console.error("Error saving request:", error);
-      alert("Failed to save request.");
+      alert("Failed to send request.");
       return;
     }
 
-    // Open WhatsApp
     window.open(waLink, "_blank");
-
-    // Show toast
+    setToastMsg("Request sent successfully!");
     setToast(true);
     setTimeout(() => setToast(false), 3000);
-
-    // Reset form
     setName("");
     setPhone("");
     setMessage("");
   };
 
-  // ✅ If user not logged in
+  // Save to customers table
+  const handleSaveCustomer = async () => {
+    if (!user || !validateForm()) return;
+
+    const finalPhone = getFinalPhone(phone);
+
+    const { error } = await supabase.from("customers").insert([
+      {
+        user_id: user.id,
+        name,
+        phone: finalPhone,
+        message,
+      },
+    ]);
+
+    if (error) {
+      console.error("Error saving customer:", error);
+      alert("Failed to save customer.");
+      return;
+    }
+
+    setToastMsg("Customer saved successfully!");
+    setToast(true);
+    setTimeout(() => setToast(false), 3000);
+    setName("");
+    setPhone("");
+    setMessage("");
+  };
+
   if (!user) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
@@ -152,12 +163,11 @@ function SendRequest() {
     );
   }
 
-  // ✅ Main UI
   return (
-    <div className="container py-5">
+    <div className="container py-4">
       <h1 className="mb-4 text-center">Send Review Request</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form>
         {/* Customer Name */}
         <div className="mb-3">
           <label className="form-label">Customer Name</label>
@@ -179,8 +189,9 @@ function SendRequest() {
             className="form-control form-control-lg"
             value={phone}
             onChange={handlePhoneChange}
-            placeholder="Enter phone number (E.g., +91 99814 35014)"
+            placeholder="Enter phone number (E.g., 9981435014)"
             required
+            maxLength={15}
           />
         </div>
 
@@ -201,13 +212,38 @@ function SendRequest() {
           <div className="preview-box">{previewMessage}</div>
         </div>
 
-        {/* Submit */}
-        <button type="submit" className="btn btn-success btn-lg w-100">
-          Send via WhatsApp
-        </button>
+        {/* Buttons one below another */}
+        <div className="d-flex flex-column gap-3 mt-3">
+          <button
+            type="button"
+            className="btn btn-success btn-lg"
+            onClick={handleSend}
+          >
+            Send via WhatsApp
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-outline-primary btn-lg"
+            onClick={handleSaveCustomer}
+          >
+            Save to Customer List
+          </button>
+        </div>
+
+        {/* View Customer List button */}
+        <div className="text-center mt-4">
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            onClick={() => navigate("/customers_list")}
+          >
+            View Customer List →
+          </button>
+        </div>
       </form>
 
-      {toast && <div className="toast-confirmation">Request saved successfully!</div>}
+      {toast && <div className="toast-confirmation">{toastMsg}</div>}
     </div>
   );
 }

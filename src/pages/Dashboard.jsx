@@ -32,7 +32,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="container py-5">
+    <div className="container py-4">
       <h1 className="mb-4">Dashboard</h1>
       <div className="row">
         {["Requests Sent", "Reviews Received", "Pending Reviews"].map(

@@ -48,6 +48,7 @@ function Navbar() {
     fetchBusinessDetails();
   }, [user, supabase]);
 
+
   return (
     <>
       {/* Desktop Navbar */}
