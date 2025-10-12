@@ -1,5 +1,6 @@
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom"; // ✅ NEW
 import { signInWithGoogle } from "../auth";
 import "./Home.css";
 
@@ -147,6 +148,8 @@ const SetupHome = ({ businessName, setBusinessName, businessLink, setBusinessLin
 const Home = () => {
   const supabase = useSupabaseClient();
   const user = useUser();
+  const location = useLocation(); // ✅ NEW
+  const isEditMode = location.state?.editMode || false; // ✅ NEW
 
   const [businessName, setBusinessName] = useState("");
   const [businessLink, setBusinessLink] = useState("");
@@ -212,9 +215,7 @@ const Home = () => {
             </button>
           </div>
         </>
-      ) : saved ? (
-        <MarketingHome />
-      ) : (
+      ) : !saved || isEditMode ? ( // ✅ this is the change
         <SetupHome
           businessName={businessName}
           setBusinessName={setBusinessName}
@@ -223,7 +224,10 @@ const Home = () => {
           handleSave={handleSave}
           saving={saving}
         />
+      ) : (
+        <MarketingHome />
       )}
+
       {toast && <div className="toast-confirmation">Business info saved!</div>}
     </div>
   );

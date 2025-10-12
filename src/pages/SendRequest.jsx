@@ -16,7 +16,7 @@ function SendRequest() {
   const [businessName, setBusinessName] = useState("");
   const [businessLink, setBusinessLink] = useState("");
 
-  // Fetch business info from DB
+  // ✅ Fetch business info from DB
   useEffect(() => {
     if (!user) return;
 
@@ -37,46 +37,78 @@ function SendRequest() {
     fetchBusinessInfo();
   }, [user, supabaseClient]);
 
-  // Live preview update
+  // ✅ Normalize phone input (remove spaces, +, -, (), etc.)
+  const normalizePhone = (input) => {
+    if (!input) return "";
+    let cleaned = input.replace(/[^\d]/g, ""); // keep only digits
+
+    // Remove leading 0
+    if (cleaned.startsWith("0")) cleaned = cleaned.slice(1);
+
+    // Add default India code if only 10 digits
+    if (cleaned.length === 10) {
+      cleaned = "91" + cleaned;
+    }
+
+    return cleaned;
+  };
+
+  // ✅ Handle phone input changes
+  const handlePhoneChange = (e) => {
+    const input = e.target.value;
+    const normalized = normalizePhone(input);
+    setPhone(normalized);
+  };
+
+  // ✅ Live preview update
   useEffect(() => {
     const text = message
       ? message
-      : `Hi ${name || "[Customer Name]"}, please leave a review for\n${businessName || "[Business Name]"}\n${businessLink || "https://your-default-review-link.com"}`;
+      : `Hi ${name || "[Customer Name]"}, please leave a review for\n${
+          businessName || "[Business Name]"
+        }\n${businessLink || "https://your-default-review-link.com"}`;
     setPreviewMessage(text);
   }, [name, message, businessName, businessLink]);
 
-  // Validate input
+  // ✅ Validate input
   const validateForm = () => {
     if (!name || name.trim().length < 2) {
       alert("Please enter a valid name (at least 2 characters).");
       return false;
     }
-    const phoneRegex = /^[0-9]{10,15}$/;
-    if (!phoneRegex.test(phone)) {
+    if (phone.length < 10 || phone.length > 15) {
       alert("Please enter a valid phone number (10–15 digits).");
       return false;
     }
     return true;
   };
 
-  // Submit form
+  // ✅ Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) return;
     if (!validateForm()) return;
 
-    // Build WhatsApp message with line breaks
-    const textWithLineBreaks = `${name ? `Hi ${name}, please leave a review for` : "Hi [Customer Name], please leave a review for"}%0A${businessName || "[Business Name]"}%0A${businessLink || "https://your-default-review-link.com"}`;
+    const finalPhone = normalizePhone(phone);
 
-    const waLink = `https://wa.me/${phone.replace(/\D/g, "")}?text=${textWithLineBreaks}`;
+    // Build WhatsApp message
+    const textWithLineBreaks = `${
+      name ? `Hi ${name}, You Recenlty Visited please leave a review for` : "Hi [Customer Name], please leave a review for"
+    }%0A${businessName || "[Business Name]"}%0A${
+      businessLink || "https://your-default-review-link.com"
+    }`;
+
+    const waLink = `https://wa.me/${finalPhone}?text=${textWithLineBreaks}`;
 
     // Save request to Supabase
     const { error } = await supabase.from("review_requests").insert([
       {
         user_id: user.id,
         name,
-        phone,
-        message: `Hi ${name}, please leave a review for ${businessName || "[Business Name]"}!`,
+        phone: finalPhone,
+        message: `Hi ${name}, please leave a review for ${
+          businessName || "[Business Name]"
+        }!`,
         status: "Pending",
       },
     ]);
@@ -87,19 +119,20 @@ function SendRequest() {
       return;
     }
 
-    // Open WhatsApp in a new tab
+    // Open WhatsApp
     window.open(waLink, "_blank");
 
     // Show toast
     setToast(true);
     setTimeout(() => setToast(false), 3000);
 
-    // Clear form
+    // Reset form
     setName("");
     setPhone("");
     setMessage("");
   };
 
+  // ✅ If user not logged in
   if (!user) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
@@ -119,11 +152,13 @@ function SendRequest() {
     );
   }
 
+  // ✅ Main UI
   return (
     <div className="container py-5">
       <h1 className="mb-4 text-center">Send Review Request</h1>
 
       <form onSubmit={handleSubmit}>
+        {/* Customer Name */}
         <div className="mb-3">
           <label className="form-label">Customer Name</label>
           <input
@@ -136,18 +171,20 @@ function SendRequest() {
           />
         </div>
 
+        {/* Customer Phone */}
         <div className="mb-3">
           <label className="form-label">Customer Phone Number</label>
           <input
             type="tel"
             className="form-control form-control-lg"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="Enter phone number with country code"
+            onChange={handlePhoneChange}
+            placeholder="Enter phone number (E.g., +91 99814 35014)"
             required
           />
         </div>
 
+        {/* Optional Message */}
         <div className="mb-3">
           <label className="form-label">Message (Optional)</label>
           <textarea
@@ -158,11 +195,13 @@ function SendRequest() {
           />
         </div>
 
+        {/* Preview */}
         <div className="mb-3 preview-message">
           <label className="form-label">Message Preview:</label>
           <div className="preview-box">{previewMessage}</div>
         </div>
 
+        {/* Submit */}
         <button type="submit" className="btn btn-success btn-lg w-100">
           Send via WhatsApp
         </button>

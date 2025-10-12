@@ -19,7 +19,11 @@ function Navbar() {
     { path: "/analytics", label: "Analytics" },
   ];
 
-  const profileImage = user?.user_metadata?.avatar_url || null;
+  const profileImage =  user?.user_metadata?.avatar_url ||
+    user?.raw_user_meta_data?.avatar_url ||
+    user?.user_metadata?.picture ||
+    user?.raw_user_meta_data?.picture ||
+    null;
   const email = user?.email || "";
 
   // Fetch business details from `profiles` table
@@ -49,7 +53,10 @@ function Navbar() {
       {/* Desktop Navbar */}
       <nav className="navbar navbar-expand-sm navbar-dark bg-primary sticky-top d-none d-sm-flex">
         <div className="container">
-          <span className="navbar-brand">Review Collector</span>
+          <NavLink to={"/"} className="navbar-brand">
+              Review Collector
+          </NavLink>
+          
           <ul className="navbar-nav ms-auto align-items-center">
             {navLinks.map(({ path, label }) => (
               <li className="nav-item" key={path}>
@@ -96,7 +103,9 @@ function Navbar() {
 
       {/* Mobile Top Navbar */}
       <nav className="navbar navbar-dark bg-primary d-flex d-sm-none justify-content-between px-3 py-2">
-        <span className="navbar-brand">Review Collector</span>
+        <NavLink to={"/"} className="navbar-brand">
+              Review Collector
+          </NavLink>
         <div>
           {!user ? (
             <button
@@ -124,7 +133,7 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Bottom Navbar */}
+      {/* Bottom Navbar (Mobile) */}
       <nav className="mobile_navbar navbar navbar-dark bg-white fixed-bottom d-flex align-items-center d-sm-none justify-content-around py-3">
         {navLinks.map(({ path, label }) => (
           <NavLink
@@ -187,21 +196,32 @@ function Navbar() {
 
               {businessDetails ? (
                 <div className="mt-3">
-                  <p className="mb-0 ">{businessDetails.business_name}</p>
+                  <p className="mb-0">{businessDetails.business_name}</p>
                   <a
                     href={businessDetails.business_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="business_link text-primary"
+                    className="business_link text-primary d-block mb-2"
                   >
                     {businessDetails.business_link}
                   </a>
+
+                  {/* ✅ EDIT BUTTON */}
+                  <button
+                    className="btn btn-primary btn-sm mt-1"
+                    onClick={() => {
+                      setShowOffcanvas(false);
+                      navigate("/", { state: { editMode: true } });
+                    }}
+                  >
+                  Edit Business Details
+                  </button>
                 </div>
               ) : (
                 <button
                   className="btn btn-outline-primary mt-3"
                   onClick={() => {
-                    navigate("/");
+                    navigate("/", { state: { editMode: true } });
                     setShowOffcanvas(false);
                   }}
                 >
