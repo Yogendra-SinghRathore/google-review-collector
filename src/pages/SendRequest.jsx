@@ -167,7 +167,7 @@ function SendRequest() {
 
   return (
     <div className="container py-4">
-      <h1 className="mb-4 text-center">Send Review Request</h1>
+      <h1 className="mb-3 text-center">Send Review Request</h1>
 
       <form>
         {/* Customer Name */}
@@ -234,7 +234,7 @@ function SendRequest() {
         </div>
 
         {/* View Customer List */}
-        <div className="text-center mt-4">
+        <div className="text-center mt-3">
           <button
             type="button"
             className="btn btn-secondary btn-sm"

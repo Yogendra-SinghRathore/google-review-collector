@@ -114,7 +114,7 @@ const CustomersList = () => {
 
   return (
     <div className="container py-4">
-      <h1 className="mb-4">Customers List</h1>
+      <h1 className="mb-3">Customers List</h1>
 
       <div className="table-responsive">
         <table className="table table-bordered align-middle">

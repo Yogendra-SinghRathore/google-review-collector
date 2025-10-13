@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // ✅ Import React
+import React, { useState, useEffect } from "react";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRealtimeRequests } from "../useRealtimeRequests";
 import { supabase } from "../supabaseClient";
@@ -80,10 +80,10 @@ const Analytics = () => {
 
   return (
     <div className="container py-4">
-      <h1 className="mb-4">Analytics</h1>
+      <h1 className="mb-3">Analytics</h1>
 
       {localRequests.length > 0 && (
-        <div className="mb-3 text-end">
+        <div className="mb-2 text-end">
           <button className="btn btn-primary" onClick={exportCSV}>
             Export CSV
           </button>
