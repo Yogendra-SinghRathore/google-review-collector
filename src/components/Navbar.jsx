@@ -55,7 +55,7 @@ function Navbar() {
       <nav className="navbar navbar-expand-sm navbar-dark bg-primary sticky-top d-none d-sm-flex">
         <div className="container">
           <NavLink to={"/"} className="navbar-brand">
-              Review Collector
+              The Review Collector
           </NavLink>
           
           <ul className="navbar-nav ms-auto align-items-center">
@@ -105,7 +105,7 @@ function Navbar() {
       {/* Mobile Top Navbar */}
       <nav className="navbar navbar-dark bg-primary d-flex d-sm-none justify-content-between px-3 py-2">
         <NavLink to={"/"} className="navbar-brand">
-              Review Collector
+              The Review Collector
           </NavLink>
         <div>
           {!user ? (
