@@ -76,7 +76,7 @@ function SendRequest() {
     return true;
   };
 
-  // Send via WhatsApp
+  // Send via WhatsApp (updated for tracking link)
   const handleSend = async () => {
     if (!user || !validateForm()) return;
 
@@ -85,26 +85,31 @@ function SendRequest() {
       ? message
       : `Hi ${name}, You recently visited, please leave a review for\n${businessName}\n${businessLink}`;
 
-    const waLink = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
-      textWithLineBreaks
-    )}`;
+    // Save to review_requests and get the new id
+    const { data: insertedData, error } = await supabase
+      .from("review_requests")
+      .insert([
+        {
+          user_id: user.id,
+          name,
+          phone: finalPhone,
+          message: textWithLineBreaks,
+          status: "Pending",
+        },
+      ])
+      .select("id") // get the generated id
+      .single();
 
-    // Save to review_requests
-    const { error } = await supabase.from("review_requests").insert([
-      {
-        user_id: user.id,
-        name,
-        phone: finalPhone,
-        message: textWithLineBreaks,
-        status: "Pending",
-      },
-    ]);
-
-    if (error) {
+    if (error || !insertedData) {
       console.error("Error saving request:", error);
       alert("Failed to send request.");
       return;
     }
+
+    const newRequestId = insertedData.id;
+
+    // Build WhatsApp tracking link using deployed Edge Function
+    const waLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
 
     window.open(waLink, "_blank");
     setToastMsg("Request sent successfully!");

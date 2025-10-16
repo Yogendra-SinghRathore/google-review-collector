@@ -48,35 +48,40 @@ const CustomersList = () => {
     fetchCustomers();
   }, [user]);
 
-  // Send WhatsApp message and move to review_requests
+  // Send WhatsApp message and move to review_requests (updated for tracking link)
   const handleSend = async (customer) => {
     if (!user) return;
 
-    // Build message including business link
+    // Build message (fallback to default if empty)
     const textMessage = customer.message
       ? customer.message
       : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${businessLink}`;
 
-    const waLink = `https://wa.me/${customer.phone}?text=${encodeURIComponent(
-      textMessage
-    )}`;
+    // Save to review_requests and get the new id
+    const { data: insertedData, error: insertError } = await supabase
+      .from("review_requests")
+      .insert([
+        {
+          user_id: user.id,
+          name: customer.name,
+          phone: customer.phone,
+          message: textMessage,
+          status: "Pending",
+        },
+      ])
+      .select("id")
+      .single();
 
-    // Save to review_requests
-    const { error: insertError } = await supabase.from("review_requests").insert([
-      {
-        user_id: user.id,
-        name: customer.name,
-        phone: customer.phone,
-        message: textMessage,
-        status: "Pending",
-      },
-    ]);
-
-    if (insertError) {
+    if (insertError || !insertedData) {
       console.error("Error moving customer to review_requests:", insertError);
       alert("Failed to send request.");
       return;
     }
+
+    const newRequestId = insertedData.id;
+
+    // Build WhatsApp tracking link using deployed Edge Function
+    const waLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
 
     // Remove from customers table
     const { error: deleteError } = await supabase
@@ -103,7 +108,9 @@ const CustomersList = () => {
           <h3>Please sign in to view customers</h3>
           <button
             className="btn btn-primary mt-3"
-            onClick={() => supabase.auth.signInWithOAuth({ provider: "google" })}
+            onClick={() =>
+              supabase.auth.signInWithOAuth({ provider: "google" })
+            }
           >
             Sign In with Google
           </button>
