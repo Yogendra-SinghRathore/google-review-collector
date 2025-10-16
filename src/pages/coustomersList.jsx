@@ -48,11 +48,11 @@ const CustomersList = () => {
     fetchCustomers();
   }, [user]);
 
-  // Send WhatsApp message and move to review_requests (updated for tracking link)
+  // Send WhatsApp message and move to review_requests (updated)
   const handleSend = async (customer) => {
     if (!user) return;
 
-    // Build message (fallback to default if empty)
+    // Build default message if customer.message is empty
     const textMessage = customer.message
       ? customer.message
       : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${businessLink}`;
@@ -80,8 +80,14 @@ const CustomersList = () => {
 
     const newRequestId = insertedData.id;
 
-    // Build WhatsApp tracking link using deployed Edge Function
-    const waLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
+    // WhatsApp link with tracking Edge Function URL in the message
+    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
+    const waMessage = customer.message
+      ? customer.message
+      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
+    const waLink = `https://wa.me/${customer.phone}?text=${encodeURIComponent(
+      waMessage
+    )}`;
 
     // Remove from customers table
     const { error: deleteError } = await supabase

@@ -76,7 +76,7 @@ function SendRequest() {
     return true;
   };
 
-  // Send via WhatsApp (updated for tracking link)
+  // Send via WhatsApp (updated)
   const handleSend = async () => {
     if (!user || !validateForm()) return;
 
@@ -97,7 +97,7 @@ function SendRequest() {
           status: "Pending",
         },
       ])
-      .select("id") // get the generated id
+      .select("id")
       .single();
 
     if (error || !insertedData) {
@@ -108,10 +108,18 @@ function SendRequest() {
 
     const newRequestId = insertedData.id;
 
-    // Build WhatsApp tracking link using deployed Edge Function
-    const waLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
+    // WhatsApp link with the tracking URL **inside the message**
+    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
+    const waMessage = message
+      ? message
+      : `Hi ${name}, You recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
+    const waLink = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
+      waMessage
+    )}`;
 
+    // Open WhatsApp
     window.open(waLink, "_blank");
+
     setToastMsg("Request sent successfully!");
     setToast(true);
     setTimeout(() => setToast(false), 3000);
