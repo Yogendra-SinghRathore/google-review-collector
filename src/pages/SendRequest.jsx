@@ -111,7 +111,7 @@ function SendRequest() {
     const newRequestId = insertedData.id;
 
     // WhatsApp link with the tracking URL inside the message
-const trackedGoogleLink = `https://google-review-collector.vercel.app/review/${newRequestId}`;
+    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
     const waMessage = message
       ? message
       : `Hi ${name}, You recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
