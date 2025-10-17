@@ -76,7 +76,7 @@ function SendRequest() {
     return true;
   };
 
-  // Send via WhatsApp (updated)
+  // Send via WhatsApp (updated for cleaner link)
   const handleSend = async () => {
     if (!user || !validateForm()) return;
 
@@ -108,11 +108,11 @@ function SendRequest() {
 
     const newRequestId = insertedData.id;
 
-    // WhatsApp link with the tracking URL **inside the message**
-    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
+    // Build clean WhatsApp link using Vercel-friendly URL
+    const trackedLink = `https://your-vercel-domain.com/r/${newRequestId}`;
     const waMessage = message
       ? message
-      : `Hi ${name}, You recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
+      : `Hi ${name}, You recently visited, please leave a review for ${businessName}: ${trackedLink}`;
     const waLink = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
       waMessage
     )}`;

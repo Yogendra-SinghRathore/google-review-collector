@@ -52,12 +52,12 @@ const CustomersList = () => {
   const handleSend = async (customer) => {
     if (!user) return;
 
-    // Build default message if customer.message is empty
+    // Default message if customer.message is empty
     const textMessage = customer.message
       ? customer.message
-      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${businessLink}`;
+      : `Hi ${customer.name}, you recently visited, please leave a review for ${businessName}.`;
 
-    // Save to review_requests and get the new id
+    // Save to review_requests and get new ID
     const { data: insertedData, error: insertError } = await supabase
       .from("review_requests")
       .insert([
@@ -81,10 +81,10 @@ const CustomersList = () => {
     const newRequestId = insertedData.id;
 
     // WhatsApp link with tracking Edge Function URL in the message
-    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
+    const trackedLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
     const waMessage = customer.message
       ? customer.message
-      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
+      : `Hi ${customer.name}, you recently visited, please leave a review for ${businessName}: ${trackedLink}`;
     const waLink = `https://wa.me/${customer.phone}?text=${encodeURIComponent(
       waMessage
     )}`;
