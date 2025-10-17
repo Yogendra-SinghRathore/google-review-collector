@@ -85,7 +85,7 @@ const CustomersList = () => {
     const newRequestId = insertedData.id;
 
     // WhatsApp link with tracking Edge Function URL in the message
-    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
+    const trackedGoogleLink = `https://google-review-collector.vercel.app/r/${newRequestId}`;
     const waMessage = customer.message
       ? customer.message
       : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;

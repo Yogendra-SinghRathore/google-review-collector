@@ -12,6 +12,7 @@ import Home from "./pages/Home.jsx";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { supabase } from "./supabaseClient";
 import CustomersList from "./pages/coustomersList.jsx";
+import RedirectReview from "./pages/RedirectReview.jsx";
 
 
 // React Router configuration
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
       { path: "/send", element: <SendRequest /> },
       { path: "/analytics", element: <Analytics /> },
       { path: "/customers_list", element: <CustomersList/> },
-
+      { path: "/r/:id", element: <RedirectReview/> },
     ],
   },
 ]);

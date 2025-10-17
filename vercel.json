@@ -1,5 +1,14 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+  "routes": [
+    {
+      "src": "/r/(.*)",
+      "dest": "/api/redirectReview?id=$1",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/",
+      "methods": ["GET"]
+    }
   ]
 }
