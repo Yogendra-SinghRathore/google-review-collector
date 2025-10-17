@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/:businessSlug/:id", "destination": "/functions/v1/redirectReview?id=:id" },
     { "source": "/(.*)", "destination": "/" }
   ]
 }

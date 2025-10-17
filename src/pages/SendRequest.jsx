@@ -110,19 +110,11 @@ function SendRequest() {
 
     const newRequestId = insertedData.id;
 
-    // Create business slug for URL
-    const businessSlug = businessName
-      .toLowerCase()
-      .replace(/\s+/g, "")
-      .replace(/[^a-z0-9]/g, "");
-
-    // New tracked link
-    const trackedLink = `https://google-review-collector.vercel.app/${businessSlug}/${newRequestId}`;
-
+    // WhatsApp link with the tracking URL inside the message
+    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
     const waMessage = message
       ? message
-      : `Hi ${name}, You recently visited, please leave a review for\n${businessName}\n${trackedLink}`;
-
+      : `Hi ${name}, You recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
     const waLink = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
       waMessage
     )}`;

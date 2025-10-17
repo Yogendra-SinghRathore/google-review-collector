@@ -84,19 +84,11 @@ const CustomersList = () => {
 
     const newRequestId = insertedData.id;
 
-    // Generate business slug for URL
-    const businessSlug = businessName
-      .toLowerCase()
-      .replace(/\s+/g, "")
-      .replace(/[^a-z0-9]/g, "");
-
-    // Tracked link using Vercel app
-    const trackedLink = `https://google-review-collector.vercel.app/${businessSlug}/${newRequestId}`;
-
+    // WhatsApp link with tracking Edge Function URL in the message
+    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
     const waMessage = customer.message
       ? customer.message
-      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${trackedLink}`;
-
+      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
     const waLink = `https://wa.me/${customer.phone}?text=${encodeURIComponent(
       waMessage
     )}`;
@@ -108,7 +100,9 @@ const CustomersList = () => {
       .eq("id", customer.id)
       .eq("user_id", user.id);
 
-    if (deleteError) console.error("Error removing customer from list:", deleteError);
+    if (deleteError) {
+      console.error("Error removing customer from list:", deleteError);
+    }
 
     // Optimistic UI update
     setCustomers((prev) => prev.filter((c) => c.id !== customer.id));
