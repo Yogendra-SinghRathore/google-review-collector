@@ -118,9 +118,13 @@ const MarketingHome = () => (
         </div>
         <div className="p-3 border rounded shadow-sm testimonial-card">
           <p className="mb-0">"Super easy to use on mobile!"</p>
-          <small>- Gym Owner</small>
+          <small>- Restaurant Owner</small>
+        </div>
+        <div className="p-3 border rounded shadow-sm">
+          <p className="mb-0"><strong>For Help & Support</strong><br/>Whatsapp : +91 9981435014</p>
         </div>
       </div>
+
     </section>
   </>
 );

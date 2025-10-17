@@ -135,7 +135,7 @@ function Navbar() {
       </nav>
 
       {/* Bottom Navbar (Mobile) */}
-      <nav className="mobile_navbar navbar navbar-dark bg-white fixed-bottom d-flex align-items-center d-sm-none justify-content-around py-3">
+      <nav className="mobile_navbar navbar navbar-dark bg-white fixed-bottom d-flex align-items-center d-sm-none justify-content-around px-1 py-3">
         {navLinks.map(({ path, label }) => (
           <NavLink
             key={path}

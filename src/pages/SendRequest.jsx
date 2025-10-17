@@ -183,11 +183,22 @@ function SendRequest() {
   return (
     <div className="container py-4">
       <h1 className="mb-3 text-center">Send Review Request</h1>
-
       <form>
         {/* Customer Name */}
         <div className="mb-3">
-          <label className="form-label">Customer Name</label>
+          <div className=" d-flex justify-content-between align-items-center">
+            <label className="form-label">Customer Name</label>
+            {/* View Customer List */}
+            <div className=" mb-2">
+              <button
+                type="button"
+                className="btn btn-white border border-black border-1 text-primary btn-sm py-0"
+                onClick={() => navigate("/customers_list")}
+              >
+                View Customers List →
+              </button>
+            </div>
+          </div>
           <input
             type="text"
             className="form-control form-control-lg"
@@ -244,18 +255,7 @@ function SendRequest() {
             className="btn btn-outline-primary btn-lg"
             onClick={handleSaveCustomer}
           >
-            Save to Customer List
-          </button>
-        </div>
-
-        {/* View Customer List */}
-        <div className="text-center mt-3">
-          <button
-            type="button"
-            className="btn btn-secondary btn-sm"
-            onClick={() => navigate("/customers_list")}
-          >
-            View Customer List →
+            Save to Customers List
           </button>
         </div>
       </form>
