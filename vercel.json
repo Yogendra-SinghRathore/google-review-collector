@@ -1,9 +1,5 @@
 {
-  "redirects": [
-    {
-      "source": "/r/:id",
-      "destination": "https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=:id",
-      "permanent": false
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
