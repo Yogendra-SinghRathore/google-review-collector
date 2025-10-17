@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/review/:id",
+      "destination": "/api/redirect?id=:id"
+    }
   ]
 }
