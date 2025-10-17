@@ -12,6 +12,7 @@ const CustomersList = () => {
   // Fetch business info
   useEffect(() => {
     if (!user) return;
+
     const fetchBusinessInfo = async () => {
       const { data, error } = await supabaseClient
         .from("profiles")
@@ -25,12 +26,14 @@ const CustomersList = () => {
         setBusinessLink(data.business_link || "");
       }
     };
+
     fetchBusinessInfo();
   }, [user, supabaseClient]);
 
   // Fetch customers from Supabase
   const fetchCustomers = async () => {
     if (!user) return;
+
     const { data, error } = await supabase
       .from("customers")
       .select("*")
@@ -41,6 +44,7 @@ const CustomersList = () => {
       console.error("Error fetching customers:", error);
       return;
     }
+
     setCustomers(data);
   };
 
@@ -48,16 +52,16 @@ const CustomersList = () => {
     fetchCustomers();
   }, [user]);
 
-  // Send WhatsApp message and move to review_requests (updated)
+  // Send WhatsApp message and move to review_requests
   const handleSend = async (customer) => {
     if (!user) return;
 
-    // Default message if customer.message is empty
+    // Build default message if customer.message is empty
     const textMessage = customer.message
       ? customer.message
-      : `Hi ${customer.name}, you recently visited, please leave a review for ${businessName}.`;
+      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${businessLink}`;
 
-    // Save to review_requests and get new ID
+    // Save to review_requests and get the new id
     const { data: insertedData, error: insertError } = await supabase
       .from("review_requests")
       .insert([
@@ -81,10 +85,10 @@ const CustomersList = () => {
     const newRequestId = insertedData.id;
 
     // WhatsApp link with tracking Edge Function URL in the message
-    const trackedLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
+    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
     const waMessage = customer.message
       ? customer.message
-      : `Hi ${customer.name}, you recently visited, please leave a review for ${businessName}: ${trackedLink}`;
+      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
     const waLink = `https://wa.me/${customer.phone}?text=${encodeURIComponent(
       waMessage
     )}`;

@@ -22,6 +22,7 @@ function SendRequest() {
   // Fetch business info
   useEffect(() => {
     if (!user) return;
+
     const fetchBusinessInfo = async () => {
       const { data, error } = await supabaseClient
         .from("profiles")
@@ -35,6 +36,7 @@ function SendRequest() {
         setBusinessLink(data.business_link || "");
       }
     };
+
     fetchBusinessInfo();
   }, [user, supabaseClient]);
 
@@ -76,7 +78,7 @@ function SendRequest() {
     return true;
   };
 
-  // Send via WhatsApp (updated for cleaner link)
+  // Send via WhatsApp
   const handleSend = async () => {
     if (!user || !validateForm()) return;
 
@@ -108,11 +110,11 @@ function SendRequest() {
 
     const newRequestId = insertedData.id;
 
-    // Build clean WhatsApp link using Vercel-friendly URL
-    const trackedLink = `https://your-vercel-domain.com/r/${newRequestId}`;
+    // WhatsApp link with the tracking URL inside the message
+    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
     const waMessage = message
       ? message
-      : `Hi ${name}, You recently visited, please leave a review for ${businessName}: ${trackedLink}`;
+      : `Hi ${name}, You recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
     const waLink = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
       waMessage
     )}`;
