@@ -1,25 +1,9 @@
 {
-  "version": 2,
-  "rewrites": [
+  "redirects": [
     {
       "source": "/r/:id",
-      "destination": "/api/redirectReview?id=:id"
-    },
-    {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    },
-    {
-      "source": "/_next/:path*",
-      "destination": "/_next/:path*"
-    },
-    {
-      "source": "/assets/:path*",
-      "destination": "/assets/:path*"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/index.html"
+      "destination": "https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=:id",
+      "permanent": false
     }
   ]
 }
