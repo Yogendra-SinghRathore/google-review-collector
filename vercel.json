@@ -1,14 +1,25 @@
 {
-  "routes": [
+  "version": 2,
+  "rewrites": [
     {
-      "src": "/r/(.*)",
-      "dest": "/api/redirectReview?id=$1",
-      "methods": ["GET"]
+      "source": "/r/:id",
+      "destination": "/api/redirectReview?id=:id"
     },
     {
-      "src": "/(.*)",
-      "dest": "/",
-      "methods": ["GET"]
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/_next/:path*",
+      "destination": "/_next/:path*"
+    },
+    {
+      "source": "/assets/:path*",
+      "destination": "/assets/:path*"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
     }
   ]
 }
