@@ -44,8 +44,8 @@ const MarketingHome = () => (
 
     <section id="how-it-works" className="mb-5">
       <h2 className="h5 mb-3 text-center">3 Simple Steps</h2>
-      <div className="d-flex flex-column gap-3">
-        <div className="p-3 border rounded shadow-sm step-card">
+      <div className="row justify-content-center text-center gap-4">
+        <div className=" col-sm-5 col-lg-3 p-3 border rounded shadow-sm step-card">
           <HeroIcon
             svg={
               <svg
@@ -65,7 +65,7 @@ const MarketingHome = () => (
           <strong>1. Add Customer</strong>
           <p className="mb-0">Enter your customer's name and phone number.</p>
         </div>
-        <div className="p-3 border rounded shadow-sm step-card">
+        <div className="col-sm-5 col-lg-3 p-3 border rounded shadow-sm step-card">
           <HeroIcon
             svg={
               <svg
@@ -86,7 +86,7 @@ const MarketingHome = () => (
           <strong>2. Send WhatsApp Link</strong>
           <p className="mb-0">Send the Google review link with one tap.</p>
         </div>
-        <div className="p-3 border rounded shadow-sm step-card">
+        <div className="col-sm-5 col-lg-3 p-3 border rounded shadow-sm step-card">
           <HeroIcon
             svg={
               <svg
@@ -120,10 +120,10 @@ const MarketingHome = () => (
           <p className="mb-0">"Super easy to use on mobile!"</p>
           <small>- Restaurant Owner</small>
         </div>
-        <div className="p-3 border rounded shadow-sm">
+      </div>
+      <div className="p-3 border rounded shadow-sm">
           <p className="mb-0"><strong>For Help & Support</strong><br/>Whatsapp : +91 9981435014</p>
         </div>
-      </div>
 
     </section>
   </>

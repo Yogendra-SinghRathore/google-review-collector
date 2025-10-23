@@ -134,7 +134,10 @@ body {
 section.text-center {
   text-align: center;
 }
-
+.testimonial-card{
+  display: flex; flex-direction: column; justify-content: space-between;
+  height: 7em;
+}
 /* Business Inputs */
 .business-inputs {
   margin-bottom: 1rem;
