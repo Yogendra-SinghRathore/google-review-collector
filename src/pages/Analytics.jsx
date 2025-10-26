@@ -7,19 +7,17 @@ const Analytics = () => {
   const user = useUser();
   const requests = useRealtimeRequests(user?.id);
   const [localRequests, setLocalRequests] = useState([]);
+  const [showChangeButtons, setShowChangeButtons] = useState(false);
 
-  // Sync localRequests with real-time requests
   useEffect(() => {
     setLocalRequests(requests);
   }, [requests]);
 
   const updateStatus = async (id, newStatus) => {
-    // Optimistic update
     setLocalRequests((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status: newStatus } : r))
     );
 
-    // Send update to Supabase
     const { error } = await supabase
       .from("review_requests")
       .update({ status: newStatus })
@@ -28,7 +26,6 @@ const Analytics = () => {
 
     if (error) {
       console.error("Error updating status:", error);
-      // Rollback if error
       setLocalRequests(requests);
     }
   };
@@ -83,7 +80,14 @@ const Analytics = () => {
       <h1 className="mb-3">Analytics</h1>
 
       {localRequests.length > 0 && (
-        <div className="mb-2 text-end">
+        <div className="mb-2 text-end d-flex justify-content-end gap-2">
+          <button
+            className="btn btn-warning"
+            onClick={() => setShowChangeButtons((prev) => !prev)}
+          >
+            {showChangeButtons ? "Hide Action Buttons" : "Change Status"}
+          </button>
+
           <button className="btn btn-primary" onClick={exportCSV}>
             Export CSV
           </button>
@@ -98,7 +102,8 @@ const Analytics = () => {
               <th>Phone</th>
               <th>Status</th>
               <th>Date Sent</th>
-              <th>Action</th>
+              {/* 👇 Hide Action header if buttons hidden */}
+              {showChangeButtons && <th>Action</th>}
             </tr>
           </thead>
           <tbody>
@@ -127,28 +132,34 @@ const Analytics = () => {
                       })
                       .replace(/ /g, "-")}
                   </td>
-                  <td>
-                    {req.status === "Pending" ? (
-                      <button
-                        className="btn btn-sm btn-success"
-                        onClick={() => updateStatus(req.id, "Reviewed")}
-                      >
-                        Mark Reviewed
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-sm btn-warning"
-                        onClick={() => updateStatus(req.id, "Pending")}
-                      >
-                        Mark Pending
-                      </button>
-                    )}
-                  </td>
+                  {/* 👇 Only show Action cell if toggle ON */}
+                  {showChangeButtons && (
+                    <td>
+                      {req.status === "Pending" ? (
+                        <button
+                          className="btn btn-sm btn-success"
+                          onClick={() => updateStatus(req.id, "Reviewed")}
+                        >
+                          Mark Reviewed
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-sm btn-warning"
+                          onClick={() => updateStatus(req.id, "Pending")}
+                        >
+                          Mark Pending
+                        </button>
+                      )}
+                    </td>
+                  )}
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center">
+                <td
+                  colSpan={showChangeButtons ? "5" : "4"} // 👈 Adjust colspan dynamically
+                  className="text-center"
+                >
                   No requests sent yet.
                 </td>
               </tr>
