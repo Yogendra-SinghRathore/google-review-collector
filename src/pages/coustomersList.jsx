@@ -149,7 +149,7 @@ const CustomersList = () => {
                 <tr key={customer.id}>
                   <td>{customer.name}</td>
                   <td>{customer.phone}</td>
-                  <td className=" text-center">
+                  <td>
                     {new Date(customer.created_at)
                       .toLocaleDateString("en-GB", {
                         day: "2-digit",
