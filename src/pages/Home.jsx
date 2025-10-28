@@ -44,7 +44,7 @@ const MarketingHome = () => (
 
     <section id="how-it-works" className="mb-5">
       <h2 className="h5 mb-3 text-center">3 Simple Steps</h2>
-      <div className="row justify-content-center text-center gap-4">
+      <div className="row justify-content-center text-center gap-3">
         <div className=" col-sm-5 col-lg-3 p-3 border rounded shadow-sm step-card">
           <HeroIcon
             svg={
@@ -110,7 +110,7 @@ const MarketingHome = () => (
     </section>
 
     <section className="mb-5 text-center">
-      <h2 className="h5 mb-3">What Users Say</h2>
+      {/* <h2 className="h5 mb-3">What Users Say</h2>
       <div className="d-flex flex-column gap-3">
         <div className="p-3 border rounded shadow-sm testimonial-card">
           <p className="mb-0">"We got more reviews in a week than before!"</p>
@@ -120,7 +120,7 @@ const MarketingHome = () => (
           <p className="mb-0">"Super easy to use on mobile!"</p>
           <small>- Restaurant Owner</small>
         </div>
-      </div>
+      </div> */}
       <div className="p-3 border rounded shadow-sm">
           <p className="mb-0"><strong>For Help & Support</strong><br/>Whatsapp : +91 9981435014</p>
         </div>

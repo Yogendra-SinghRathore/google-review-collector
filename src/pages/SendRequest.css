@@ -45,6 +45,8 @@
 .toast-confirmation {
   position: fixed;
   bottom: 1rem;
+  top: 20px;
+  height: fit-content;
   left: 50%;
   transform: translateX(-50%);
   background-color: #0d6efd;

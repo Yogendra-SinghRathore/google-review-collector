@@ -241,10 +241,10 @@ function SendRequest() {
         </div>
 
         {/* Buttons */}
-        <div className="d-flex flex-column gap-3 mt-3">
+        <div className="d-flex gap-2 mt-3">
           <button
             type="button"
-            className="btn btn-success btn-lg"
+            className="btn btn-success py-2 btn-sm w-100"
             onClick={handleSend}
           >
             Send via WhatsApp
@@ -252,7 +252,7 @@ function SendRequest() {
 
           <button
             type="button"
-            className="btn btn-outline-primary btn-lg"
+            className="btn btn-outline-primary py-2 btn-sm w-100"
             onClick={handleSaveCustomer}
           >
             Save to Customers List
