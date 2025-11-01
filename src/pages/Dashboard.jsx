@@ -38,7 +38,7 @@ const Dashboard = () => {
         {["Requests Sent", "Reviews Received", "Pending Reviews"].map(
           (title, idx) => {
             const value =
-              idx === 0 ? stats.total : idx === 1 ? stats.reviewed : stats.pending;
+              idx === 0 ? stats.total : idx === 1 ? stats.reviewed : stats.pending ;
             return (
               <div className="col-md-4 mb-3" key={idx}>
                 <div className="card text-center">

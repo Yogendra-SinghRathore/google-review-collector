@@ -25,10 +25,8 @@
 }
 
 /* Hero Illustration */
-.hero-illustration {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
+.hero-illustration img{
+  width: 6.5em; margin-left: 1.5em;
 }
 
 /* Buttons */

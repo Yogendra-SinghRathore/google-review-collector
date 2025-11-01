@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { signInWithGoogle, signOut } from "../auth";
 import { useState, useEffect } from "react";
+import rlogo from "../assets/rlogo1.png";
 import "./Navbar.css";
 
 function Navbar() {
@@ -55,6 +56,7 @@ function Navbar() {
       <nav className="navbar navbar-expand-sm navbar-dark bg-primary sticky-top d-none d-sm-flex">
         <div className="container">
           <NavLink to={"/"} className="navbar-brand">
+              <img className="navbar_logo" src={rlogo} alt="" />
               The Review Collector
           </NavLink>
           
@@ -105,6 +107,7 @@ function Navbar() {
       {/* Mobile Top Navbar */}
       <nav className="navbar navbar-dark bg-primary d-flex d-sm-none justify-content-between px-3 py-2">
         <NavLink to={"/"} className="navbar-brand">
+        <img className="navbar_logo" src={rlogo} alt="" />
               The Review Collector
           </NavLink>
         <div>

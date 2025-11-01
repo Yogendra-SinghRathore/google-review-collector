@@ -2,6 +2,7 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom"; // ✅ NEW
 import { signInWithGoogle } from "../auth";
+import rlogo from "../assets/rlogo1.png";
 import "./Home.css";
 
 // ------------------ MARKETING SECTION ------------------
@@ -10,20 +11,9 @@ const HeroIcon = ({ svg }) => <div className="hero-icon mb-2">{svg}</div>;
 const MarketingHome = () => (
   <>
     <section className="text-center mb-5 hero-section">
-      <div className="hero-illustration mb-3">
-        <svg
-          width="80"
-          height="80"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#0d6efd"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M12 2l7 7-7 7-7-7 7-7z" />
-          <path d="M12 12v10" />
-        </svg>
+      <div className="hero-illustration mb-2">
+        <img src={rlogo} alt="" />
+        
       </div>
       <h1 className="h3 mb-2">Get More Google Reviews</h1>
       <p className="lead mb-3">Quickly collect reviews from your customers via WhatsApp.</p>
