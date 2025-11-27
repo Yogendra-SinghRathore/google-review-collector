@@ -31,6 +31,13 @@ const router = createBrowserRouter([
   },
 ]);
 
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js");
+  });
+}
+
+
 // Render the app with Supabase session context
 createRoot(document.getElementById("root")).render(
   <StrictMode>
