@@ -11,7 +11,7 @@ const HeroIcon = ({ svg }) => <div className="hero-icon mb-2">{svg}</div>;
 const MarketingHome = () => (
   <>
     <section className="text-center mb-5 hero-section">
-      <div className="hero-illustration mb-2">
+      <div className="hero-illustration">
         <img src={rlogo} alt="" />
         
       </div>
