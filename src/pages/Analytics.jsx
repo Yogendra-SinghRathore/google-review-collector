@@ -98,7 +98,7 @@ const Analytics = () => {
               <th>Name</th>
               <th>Phone</th>
               <th>Status</th>
-              <th>Date Sent</th>
+              <th>Sent_Date</th>
               {showChangeButtons && <th>Action</th>}
             </tr>
           </thead>
@@ -137,14 +137,14 @@ const Analytics = () => {
                           className="btn-primary-gradient btn-small"
                           onClick={() => updateStatus(req.id, "Reviewed")}
                         >
-                          Mark Reviewed
+                        Reviewed
                         </button>
                       ) : (
                         <button
                           className="btn-secondary-ghost btn-small"
                           onClick={() => updateStatus(req.id, "Pending")}
                         >
-                          Mark Pending
+                        Pending
                         </button>
                       )}
                     </td>

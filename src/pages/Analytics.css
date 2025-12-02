@@ -87,13 +87,13 @@
 
 .analytics-table th {
   background: #F5F7FB;
-  padding: 12px;
+  padding: 12px 5px;
   font-weight: 600;
   text-align: left;
 }
 
 .analytics-table td {
-  padding: 12px;
+  padding: 12px 5px;
   border-top: 1px solid #eee;
 }
 
@@ -126,7 +126,7 @@
 /* Responsive */
 @media (max-width: 600px) {
   .analytics-page {
-    padding: 16px;
+    padding: 16px 8px;
   }
 
   .analytics-title {
