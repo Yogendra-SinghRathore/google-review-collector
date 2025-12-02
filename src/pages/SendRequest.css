@@ -227,6 +227,12 @@
   .actions-row{
     flex-direction: column;
   }
+  .card{
+    padding: 10px;
+  }
+  .page-container{
+    padding: 20px 5px;
+  }
 }
 
 /* Utilities: subtle text styles */
