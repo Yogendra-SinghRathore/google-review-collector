@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRealtimeRequests } from "../useRealtimeRequests";
 import { supabase } from "../supabaseClient";
+import * as XLSX from "xlsx"; // ✅ Added for Excel export
+import "./Analytics.css";
 
 const Analytics = () => {
   const user = useUser();
@@ -30,40 +32,34 @@ const Analytics = () => {
     }
   };
 
-  const exportCSV = () => {
+  // ✅ NEW Excel Export function (safe, clean)
+  const exportExcel = () => {
     if (!localRequests.length) return;
 
-    const headers = ["Name", "Phone", "Status", "Date Sent"];
-    const rows = localRequests.map((r) => [
-      r.name,
-      r.phone,
-      r.status,
-      new Date(r.created_at).toLocaleDateString(),
-    ]);
+    const rows = localRequests.map((r) => ({
+      Name: r.name,
+      Phone: r.phone,
+      Status: r.status,
+      "Date Sent": new Date(r.created_at).toLocaleDateString(),
+    }));
 
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      [headers, ...rows].map((e) => e.join(",")).join("\n");
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Requests");
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute(
-      "download",
-      `review_requests_${new Date().toISOString().split("T")[0]}.csv`
+    XLSX.writeFile(
+      workbook,
+      `review_requests_${new Date().toISOString().split("T")[0]}.xlsx`
     );
-    link.setAttribute("href", encodedUri);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   if (!user) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="text-center">
+      <div className="analytics-auth-wrapper">
+        <div className="analytics-auth-box">
           <h3>Please sign in to view analytics</h3>
           <button
-            className="btn btn-primary mt-3"
+            className="btn-primary-gradient"
             onClick={() =>
               supabase.auth.signInWithOAuth({ provider: "google" })
             }
@@ -76,36 +72,37 @@ const Analytics = () => {
   }
 
   return (
-    <div className="container py-4">
-      <h1 className="mb-3">Analytics</h1>
+    <div className="analytics-page">
+      <h1 className="analytics-title">Analytics</h1>
 
       {localRequests.length > 0 && (
-        <div className="mb-2 text-end d-flex justify-content-end gap-2">
+        <div className="analytics-top-buttons">
           <button
-            className="btn btn-warning"
+            className="btn-secondary-ghost"
             onClick={() => setShowChangeButtons((prev) => !prev)}
           >
             {showChangeButtons ? "Hide Action Buttons" : "Change Status"}
           </button>
 
-          <button className="btn btn-primary" onClick={exportCSV}>
-            Export CSV
+          {/* ✅ Updated button to export EXCEL instead of CSV */}
+          <button className="btn-primary-gradient" onClick={exportExcel}>
+            Export Excel
           </button>
         </div>
       )}
 
-      <div className="table-responsive">
-        <table className="table table-bordered align-middle">
-          <thead className="table-light">
+      <div className="analytics-table-wrapper">
+        <table className="analytics-table">
+          <thead>
             <tr>
               <th>Name</th>
               <th>Phone</th>
               <th>Status</th>
               <th>Date Sent</th>
-              {/* 👇 Hide Action header if buttons hidden */}
               {showChangeButtons && <th>Action</th>}
             </tr>
           </thead>
+
           <tbody>
             {localRequests.length > 0 ? (
               localRequests.map((req) => (
@@ -114,11 +111,11 @@ const Analytics = () => {
                   <td>{req.phone}</td>
                   <td>
                     <span
-                      className={`badge ${
+                      className={
                         req.status === "Reviewed"
-                          ? "bg-success"
-                          : "bg-warning text-dark"
-                      }`}
+                          ? "status-badge reviewed"
+                          : "status-badge pending"
+                      }
                     >
                       {req.status}
                     </span>
@@ -132,19 +129,19 @@ const Analytics = () => {
                       })
                       .replace(/ /g, "-")}
                   </td>
-                  {/* 👇 Only show Action cell if toggle ON */}
+
                   {showChangeButtons && (
                     <td>
                       {req.status === "Pending" ? (
                         <button
-                          className="btn btn-sm btn-success"
+                          className="btn-primary-gradient btn-small"
                           onClick={() => updateStatus(req.id, "Reviewed")}
                         >
                           Mark Reviewed
                         </button>
                       ) : (
                         <button
-                          className="btn btn-sm btn-warning"
+                          className="btn-secondary-ghost btn-small"
                           onClick={() => updateStatus(req.id, "Pending")}
                         >
                           Mark Pending
@@ -157,8 +154,8 @@ const Analytics = () => {
             ) : (
               <tr>
                 <td
-                  colSpan={showChangeButtons ? "5" : "4"} // 👈 Adjust colspan dynamically
-                  className="text-center"
+                  colSpan={showChangeButtons ? "5" : "4"}
+                  className="analytics-empty"
                 >
                   No requests sent yet.
                 </td>

@@ -1,0 +1,38 @@
+.redirect-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 18vh;
+}
+
+.redirect-card {
+  max-width: 1100px; /* Same width as other components */
+  width: 100%;
+  text-align: center;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.redirect-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1d1d1f;
+}
+
+.redirect-text {
+  font-size: 15px;
+  color: #3b3b3b;
+}
+
+.redirect-link {
+  color: var(--brand-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.redirect-link:hover {
+  text-decoration: underline;
+}

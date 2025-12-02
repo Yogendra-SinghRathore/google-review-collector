@@ -163,11 +163,12 @@ function SendRequest() {
 
   if (!user) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="text-center">
-          <h3>Please sign in to send requests</h3>
+      <div className="page-container" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ textAlign: "center" }}>
+          <h3 style={{ color: "var(--text-dark)", marginBottom: 12 }}>Please sign in to send requests</h3>
           <button
-            className="btn btn-primary mt-3"
+            className="btn-send"
+            style={{ width: 220, display: "inline-block" }}
             onClick={async () => {
               const { supabase } = await import("../supabaseClient");
               supabase.auth.signInWithOAuth({ provider: "google" });
@@ -181,84 +182,94 @@ function SendRequest() {
   }
 
   return (
-    <div className="container py-4">
-      <h1 className="mb-3 text-center">Send Review Request</h1>
-      <form>
-        {/* Customer Name */}
-        <div className="mb-3">
-          <div className=" d-flex justify-content-between align-items-center">
-            <label className="form-label">Customer Name</label>
-            {/* View Customer List */}
-            <div className=" mb-2">
+    <div className="page-container">
+      <h1 className="page-heading">Send Review Request</h1>
+
+      <div className="card" role="region" aria-labelledby="customer-form">
+        <form>
+          <div className="form-grid">
+            {/* Customer Name */}
+            <div className="form-group" id="customer-form">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <label className="label">Customer Name</label>
+                <div>
+                  <button
+                    type="button"
+                    className="inline-link-btn"
+                    onClick={() => navigate("/customers_list")}
+                  >
+                    View Customers List →
+                  </button>
+                </div>
+              </div>
+              <input
+                type="text"
+                className="input-large"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter customer name"
+                required
+              />
+            </div>
+
+            {/* Customer Phone */}
+            <div className="form-group">
+              <label className="label">Customer Phone Number</label>
+              <input
+                type="tel"
+                className="input-large"
+                value={phone}
+                onChange={handlePhoneChange}
+                placeholder="Enter phone number (E.g., 9981435014)"
+                required
+                maxLength={15}
+              />
+            </div>
+
+            {/* Optional Message */}
+            <div className="form-group" style={{ gridColumn: "1 / -1" }}>
+              <label className="label">Message (Optional)</label>
+              <textarea
+                className="input-large"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Write a custom message"
+              />
+            </div>
+
+            {/* Live Preview */}
+            <div className="form-group" style={{ gridColumn: "1 / -1" }}>
+              <div className="preview-label">Message Preview:</div>
+              <div className="preview-card">
+                <div className="preview-box">{previewMessage}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="actions-row">
+            <div className="action-col">
               <button
                 type="button"
-                className="btn btn-white border border-black border-1 text-primary btn-sm py-0"
-                onClick={() => navigate("/customers_list")}
+                className="btn-send"
+                onClick={handleSend}
               >
-                View Customers List →
+                Send via WhatsApp
+              </button>
+            </div>
+
+            <div className="action-col">
+              <button
+                type="button"
+                className="btn-ghost"
+                onClick={handleSaveCustomer}
+              >
+                Save to Customers List
               </button>
             </div>
           </div>
-          <input
-            type="text"
-            className="form-control form-control-lg"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter customer name"
-            required
-          />
-        </div>
-
-        {/* Customer Phone */}
-        <div className="mb-3">
-          <label className="form-label">Customer Phone Number</label>
-          <input
-            type="tel"
-            className="form-control form-control-lg"
-            value={phone}
-            onChange={handlePhoneChange}
-            placeholder="Enter phone number (E.g., 9981435014)"
-            required
-            maxLength={15}
-          />
-        </div>
-
-        {/* Optional Message */}
-        <div className="mb-3">
-          <label className="form-label">Message (Optional)</label>
-          <textarea
-            className="form-control form-control-lg"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Write a custom message"
-          />
-        </div>
-
-        {/* Live Preview */}
-        <div className="mb-3 preview-message">
-          <label className="form-label">Message Preview:</label>
-          <div className="preview-box">{previewMessage}</div>
-        </div>
-
-        {/* Buttons */}
-        <div className="d-flex gap-2 mt-3">
-          <button
-            type="button"
-            className="btn btn-success py-2 btn-sm w-100"
-            onClick={handleSend}
-          >
-            Send via WhatsApp
-          </button>
-
-          <button
-            type="button"
-            className="btn btn-outline-primary py-2 btn-sm w-100"
-            onClick={handleSaveCustomer}
-          >
-            Save to Customers List
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
 
       {toast && <div className="toast-confirmation">{toastMsg}</div>}
     </div>

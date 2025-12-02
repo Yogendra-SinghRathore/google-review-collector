@@ -1,18 +1,19 @@
-import React from 'react'
+import React from 'react';
+import './Footer.css';
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-light py-3 mt-auto">
-      <div className="container text-center">
-        <p className="mb-0">
+    <footer className="footer-wrapper">
+      <div className="footer-container">
+        <p className="footer-text">
           &copy; {new Date().getFullYear()} Review Collector. All rights reserved.
         </p>
-        <p className="mb-0">
+        <p className="footer-text">
           Built with ❤️ by Yogendra
         </p>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

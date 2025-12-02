@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { supabase } from "../supabaseClient";
+import "./CustomersList.css";
 
 const CustomersList = () => {
   const user = useUser();
@@ -30,7 +31,7 @@ const CustomersList = () => {
     fetchBusinessInfo();
   }, [user, supabaseClient]);
 
-  // Fetch customers from Supabase
+  // Fetch customers
   const fetchCustomers = async () => {
     if (!user) return;
 
@@ -52,16 +53,14 @@ const CustomersList = () => {
     fetchCustomers();
   }, [user]);
 
-  // Send WhatsApp message and move to review_requests
+  // Send & move to review_requests
   const handleSend = async (customer) => {
     if (!user) return;
 
-    // Build default message if customer.message is empty
     const textMessage = customer.message
       ? customer.message
       : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${businessLink}`;
 
-    // Save to review_requests and get the new id
     const { data: insertedData, error: insertError } = await supabase
       .from("review_requests")
       .insert([
@@ -77,47 +76,38 @@ const CustomersList = () => {
       .single();
 
     if (insertError || !insertedData) {
-      console.error("Error moving customer to review_requests:", insertError);
+      console.error("Error moving customer:", insertError);
       alert("Failed to send request.");
       return;
     }
 
     const newRequestId = insertedData.id;
+    const trackedLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
 
-    // WhatsApp link with tracking Edge Function URL in the message
-    const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
     const waMessage = customer.message
       ? customer.message
-      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${trackedGoogleLink}`;
+      : `Hi ${customer.name}, you recently visited, please leave a review for\n${businessName}\n${trackedLink}`;
+
     const waLink = `https://wa.me/${customer.phone}?text=${encodeURIComponent(
       waMessage
     )}`;
 
-    // Remove from customers table
-    const { error: deleteError } = await supabase
-      .from("customers")
-      .delete()
-      .eq("id", customer.id)
-      .eq("user_id", user.id);
+    // Remove from table
+    await supabase.from("customers").delete().eq("id", customer.id);
 
-    if (deleteError) {
-      console.error("Error removing customer from list:", deleteError);
-    }
-
-    // Optimistic UI update
     setCustomers((prev) => prev.filter((c) => c.id !== customer.id));
 
-    // Open WhatsApp
     window.open(waLink, "_blank");
   };
 
   if (!user) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="text-center">
-          <h3>Please sign in to view customers</h3>
+      <div className="cl-center-screen">
+        <div className="cl-auth-box">
+          <h3 className="cl-auth-title">Please sign in to view customers</h3>
+
           <button
-            className="btn btn-primary mt-3"
+            className="cl-btn-primary"
             onClick={() =>
               supabase.auth.signInWithOAuth({ provider: "google" })
             }
@@ -130,12 +120,12 @@ const CustomersList = () => {
   }
 
   return (
-    <div className="container py-4">
-      <h1 className="mb-3">Customers List</h1>
+    <div className="cl-container">
+      <h1 className="cl-title">Customers List</h1>
 
-      <div className="table-responsive">
-        <table className="table table-bordered align-middle">
-          <thead className="table-light">
+      <div className="cl-table-wrapper">
+        <table className="cl-table">
+          <thead>
             <tr>
               <th>Name</th>
               <th>Phone</th>
@@ -143,6 +133,7 @@ const CustomersList = () => {
               <th>Action</th>
             </tr>
           </thead>
+
           <tbody>
             {customers.length > 0 ? (
               customers.map((customer) => (
@@ -160,7 +151,7 @@ const CustomersList = () => {
                   </td>
                   <td>
                     <button
-                      className="btn btn-sm btn-success"
+                      className="cl-btn-send"
                       onClick={() => handleSend(customer)}
                     >
                       Send
@@ -170,7 +161,7 @@ const CustomersList = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="text-center">
+                <td colSpan="4" className="cl-empty">
                   No customers in the list.
                 </td>
               </tr>

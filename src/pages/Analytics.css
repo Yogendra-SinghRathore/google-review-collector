@@ -1,0 +1,135 @@
+/* Page */
+.analytics-page {
+  padding: 32px;
+  max-width: 1100px;  /* same width as your other updated components */
+  margin: 0 auto;     /* centers the page */
+}
+
+.analytics-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #0A0F1F;
+}
+
+/* Auth Screen */
+.analytics-auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+}
+
+.analytics-auth-box {
+  text-align: center;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Buttons */
+.btn-primary-gradient {
+  background: linear-gradient(90deg, #4F46E5, #6D28D9);
+  color: #fff;
+  padding: 10px 22px;
+  border: none;
+  cursor: pointer;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.btn-primary-gradient:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary-ghost {
+  border: 2px solid #4F46E5;
+  background: transparent;
+  color: #4F46E5;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-secondary-ghost:hover {
+  background: rgba(79, 70, 229, 0.1);
+}
+
+.btn-small {
+  padding: 6px 14px;
+  font-size: 14px;
+}
+
+/* Top Buttons Layout */
+.analytics-top-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Table */
+.analytics-table-wrapper {
+  overflow-x: auto;
+}
+
+.analytics-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.analytics-table th {
+  background: #F5F7FB;
+  padding: 12px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.analytics-table td {
+  padding: 12px;
+  border-top: 1px solid #eee;
+}
+
+/* Status badges */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.status-badge.reviewed {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.status-badge.pending {
+  background: #FEF9C3;
+  color: #92400E;
+}
+
+/* Empty State */
+.analytics-empty {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .analytics-page {
+    padding: 16px;
+  }
+
+  .analytics-title {
+    font-size: 22px;
+  }
+}

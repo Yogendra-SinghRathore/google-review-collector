@@ -1,69 +1,236 @@
-/* Container spacing */
-.container {
-  padding-left: 1rem;
-  padding-right: 1rem;
+/* SendRequest.css — Brand-kit, Card-based, Pure CSS (Rounded 16px) */
+
+/* ---------------------------
+   Brand tokens
+   --------------------------- */
+:root{
+  --primary-start: #2563eb; /* gradient start */
+  --primary-end:   #1e40af; /* gradient end */
+  --primary-solid: #2563eb;
+  --text-dark:     #1A1C1E;
+  --text-muted:    #6B7280;
+  --success:       #16A34A;
+  --card-bg:       #FFFFFF;
+  --page-bg:       #F5F7FA;
+  --radius-lg:     16px;
+  --shadow-md:     0 8px 24px rgba(15,23,42,0.06);
+  --shadow-sm:     0 4px 12px rgba(15,23,42,0.04);
+  --gap:            16px;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* Form inputs for mobile */
-.form-control-lg {
+/* ---------------------------
+   Page & container
+   --------------------------- */
+.page-container{
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--page-bg);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Heading */
+.page-heading{
+  text-align: center;
+  color: var(--text-dark);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+/* Top-level card hold */
+.card{
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+/* Form layout within card */
+.form-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap);
+}
+
+/* On wider screens, keep slight two-column where appropriate */
+@media (min-width: 820px){
+  .form-grid.two-cols{
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+}
+
+/* Form group */
+.form-group{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Labels */
+.label{
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* Inputs / textarea */
+.input-large{
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid #E6E9EE;
+  background: #fff;
   font-size: 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  color: var(--text-dark);
+  outline: none;
+  transition: box-shadow .18s ease, border-color .18s ease;
+  resize: vertical;
+  min-height: 44px;
+  box-sizing: border-box;
 }
 
-/* Buttons full-width on mobile */
-.btn-lg {
-  padding: 0.75rem 1rem;
+.input-large:focus{
+  border-color: var(--primary-solid);
+  box-shadow: 0 0 0 6px rgba(37,99,235,0.06);
+}
+
+/* Preview message card */
+.preview-card{
+  border-radius: var(--radius-lg);
+  border: 1px solid #EEF2FF;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-label{
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.preview-box{
+  background-color: #F8FAFC;
+  border: 1px solid #E6EEF6;
+  border-radius: 12px;
+  padding: 12px;
+  color: #1F2937;
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Actions row */
+.actions-row{
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Each action button (50% width) */
+.action-col{
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Send (primary) - Gradient Premium Button */
+.btn-send{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+  color: #ffffff;
+  font-weight: 600;
   font-size: 1rem;
-  border-radius: 0.5rem;
-}
-
-.btn-primary {
-  background-color: #0d6efd;
   border: none;
-  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(30,64,175,0.18);
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
 }
 
-.btn-success {
-  background-color: #198754;
-  border: none;
-  color: #fff;
+.btn-send:active{ transform: translateY(1px); }
+.btn-send:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-.btn-outline-secondary {
-  border: 2px solid #6c757d;
-  color: #6c757d;
-  background-color: #fff;
+/* Save (ghost) - clean border + text */
+.btn-ghost{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: #FFFFFF;
+  color: var(--primary-solid);
+  font-weight: 600;
+  font-size: 1rem;
+  border: 2px solid var(--primary-solid);
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease, transform .12s ease;
 }
 
-.btn:hover {
-  opacity: 0.9;
-  transition: 0.3s;
+.btn-ghost:hover{
+  background: rgba(37,99,235,0.06);
 }
 
-/* Toast confirmation */
-.toast-confirmation {
+/* Small utility */
+.text-center{
+  text-align: center;
+}
+.mb-12{ margin-bottom: 12px; }
+.mt-8{ margin-top: 8px; }
+
+/* Toast (we kept your class name and behavior) */
+.toast-confirmation{
   position: fixed;
-  bottom: 1rem;
-  top: 20px;
-  height: fit-content;
+  bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #0d6efd;
+  background-color: var(--success);
   color: #fff;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px 16px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
   z-index: 9999;
   text-align: center;
 }
-/* WhatsApp Message Preview */
-.preview-message .preview-box {
-  background-color: #f1f3f5;
-  border: 1px solid #ddd;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
-  color: #333;
-  font-size: 0.95rem;
-  word-break: break-word;
+
+/* View Customers List button (small inline button) */
+.inline-link-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #E6EEF6;
+  color: var(--primary-solid);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Responsive: keep actions side-by-side on tablet and desktop,
+   on narrow mobile they stack */
+@media (max-width: 540px){
+  .actions-row{
+    flex-direction: column;
+  }
+}
+
+/* Utilities: subtle text styles */
+.form-hint{
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }

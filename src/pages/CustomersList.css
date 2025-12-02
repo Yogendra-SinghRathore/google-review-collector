@@ -1,0 +1,106 @@
+/* Page container */
+.cl-container {
+  padding: 2rem 1.2rem;
+  max-width: 900px;
+  margin: auto;
+}
+
+/* Page Title */
+.cl-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #0A2540;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Center full screen when logged-out */
+.cl-center-screen {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.cl-auth-box {
+  text-align: center;
+}
+
+.cl-auth-title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #0A2540;
+}
+
+/* Primary gradient button */
+.cl-btn-primary {
+  background: linear-gradient(135deg, #4F46E5, #6366F1);
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  color: white;
+  border: none;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cl-btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Table wrapper */
+.cl-table-wrapper {
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid #e3e7ef;
+}
+
+/* Table styling */
+.cl-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.cl-table thead {
+  background: #f1f3f9;
+}
+
+.cl-table th,
+.cl-table td {
+  padding: 0.9rem;
+  border-bottom: 1px solid #e6e6e6;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.cl-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Send Button (Brand Kit Blue Ghost Button) */
+.cl-btn-send {
+  background: transparent;
+  border: 2px solid #4F46E5;
+  padding: 0.4rem 0.9rem;
+  border-radius: 12px;
+  color: #4F46E5;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cl-btn-send:hover {
+  background: #f0f2ff;
+}
+
+/* Empty message */
+.cl-empty {
+  text-align: center;
+  padding: 1.5rem;
+  font-style: italic;
+  color: #555;
+}

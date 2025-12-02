@@ -13,10 +13,11 @@ const MarketingHome = () => (
     <section className="text-center mb-5 hero-section">
       <div className="hero-illustration">
         <img src={rlogo} alt="" />
-        
       </div>
       <h1 className="h3 mb-2">Get More Google Reviews</h1>
-      <p className="lead mb-3">Quickly collect reviews from your customers via WhatsApp.</p>
+      <p className="lead mb-3">
+        Quickly collect reviews from your customers via WhatsApp.
+      </p>
       <a href="/send" className="btn btn-primary btn-lg w-100 mb-2">
         Send Your First Request
       </a>
@@ -28,14 +29,15 @@ const MarketingHome = () => (
     <section className="mb-5 text-center">
       <h2 className="h5 mb-2">Why Use Review Collector?</h2>
       <p className="mb-0">
-        Small businesses struggle to get Google reviews. We make it simple: send a link via WhatsApp and track responses—all in one place.
+        Small businesses struggle to get Google reviews. We make it simple: send
+        a link via WhatsApp and track responses—all in one place.
       </p>
     </section>
 
     <section id="how-it-works" className="mb-5">
       <h2 className="h5 mb-3 text-center">3 Simple Steps</h2>
       <div className="row justify-content-center text-center gap-3">
-        <div className=" col-sm-5 col-lg-3 p-3 border rounded shadow-sm step-card">
+        <div className=" col-sm-5 col-lg-3 p-3 shadow-sm step-card">
           <HeroIcon
             svg={
               <svg
@@ -43,10 +45,10 @@ const MarketingHome = () => (
                 height="40"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#0d6efd"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                stroke="#0070EF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
                 <path d="M12 2v20M2 12h20" />
               </svg>
@@ -55,7 +57,7 @@ const MarketingHome = () => (
           <strong>1. Add Customer</strong>
           <p className="mb-0">Enter your customer's name and phone number.</p>
         </div>
-        <div className="col-sm-5 col-lg-3 p-3 border rounded shadow-sm step-card">
+        <div className="col-sm-5 col-lg-3 p-3  shadow-sm step-card">
           <HeroIcon
             svg={
               <svg
@@ -63,10 +65,10 @@ const MarketingHome = () => (
                 height="40"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#0d6efd"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                stroke="#0070EF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 6v6l4 2" />
@@ -76,7 +78,7 @@ const MarketingHome = () => (
           <strong>2. Send WhatsApp Link</strong>
           <p className="mb-0">Send the Google review link with one tap.</p>
         </div>
-        <div className="col-sm-5 col-lg-3 p-3 border rounded shadow-sm step-card">
+        <div className="col-sm-5 col-lg-3 p-3  shadow-sm step-card">
           <HeroIcon
             svg={
               <svg
@@ -84,17 +86,19 @@ const MarketingHome = () => (
                 height="40"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#0d6efd"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                stroke="#0070EF"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             }
           />
           <strong>3. Track Reviews</strong>
-          <p className="mb-0">See who left a review and manage responses easily.</p>
+          <p className="mb-0">
+            See who left a review and manage responses easily.
+          </p>
         </div>
       </div>
     </section>
@@ -112,25 +116,47 @@ const MarketingHome = () => (
         </div>
       </div> */}
       <div className="p-3 border rounded shadow-sm">
-          <p className="mb-0"><strong>For Help & Support</strong><br/>Whatsapp : +91 9981435014</p>
-        </div>
-
+        <p className="mb-0">
+          <strong>For Help & Support</strong>
+          <br />
+          Whatsapp : +91 9981435014
+        </p>
+      </div>
     </section>
   </>
 );
 
 // ------------------ BUSINESS SETUP SECTION ------------------
-const SetupHome = ({ businessName, setBusinessName, businessLink, setBusinessLink, handleSave, saving }) => (
+const SetupHome = ({
+  businessName,
+  setBusinessName,
+  businessLink,
+  setBusinessLink,
+  handleSave,
+  saving,
+}) => (
   <div className="business-inputs">
     <div>
       <label>Business Name</label>
-      <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="Your business name" />
+      <input
+        type="text"
+        value={businessName}
+        onChange={(e) => setBusinessName(e.target.value)}
+        placeholder="Your business name"
+      />
       <small>This will appear in all messages sent to your customers.</small>
     </div>
     <div>
       <label>Business Link</label>
-      <input type="url" value={businessLink} onChange={(e) => setBusinessLink(e.target.value)} placeholder="https://example.com/review-link" />
-      <small>Customers will be redirected here when they click the review link.</small>
+      <input
+        type="url"
+        value={businessLink}
+        onChange={(e) => setBusinessLink(e.target.value)}
+        placeholder="https://example.com/review-link"
+      />
+      <small>
+        Customers will be redirected here when they click the review link.
+      </small>
     </div>
     <button className="btn-save" onClick={handleSave} disabled={saving}>
       {saving ? "Saving..." : "Save"}
@@ -155,7 +181,11 @@ const Home = () => {
   useEffect(() => {
     if (!user) return;
     const fetchProfile = async () => {
-      const { data, error } = await supabase.from("profiles").select("*").eq("user_id", user.id).maybeSingle();
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
       if (error && error.code !== "PGRST116") console.error(error);
       if (data) {
         setBusinessName(data.business_name || "");

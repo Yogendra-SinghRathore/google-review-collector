@@ -1,5 +1,6 @@
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRealtimeRequests } from "../useRealtimeRequests";
+import "./Dashboard.css";
 
 const Dashboard = () => {
   const user = useUser();
@@ -13,12 +14,12 @@ const Dashboard = () => {
 
   if (!user) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
+      <div className="dash-center-screen">
+        <div className="dash-auth-box">
+          <h3 className="dash-auth-title">Please sign in to view your dashboard</h3>
 
-        <div className="text-center">
-          <h3>Please sign in to view your dashboard</h3>
           <button
-            className="btn btn-primary mt-3"
+            className="dash-btn-primary"
             onClick={async () => {
               const { supabase } = await import("../supabaseClient");
               supabase.auth.signInWithOAuth({ provider: "google" });
@@ -32,21 +33,19 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="container py-4">
-      <h1 className="mb-4">Dashboard</h1>
-      <div className="row">
+    <div className="dash-container">
+      <h1 className="dash-page-title">Dashboard</h1>
+
+      <div className="dash-grid">
         {["Requests Sent", "Reviews Received", "Pending Reviews"].map(
           (title, idx) => {
             const value =
-              idx === 0 ? stats.total : idx === 1 ? stats.reviewed : stats.pending ;
+              idx === 0 ? stats.total : idx === 1 ? stats.reviewed : stats.pending;
+
             return (
-              <div className="col-md-4 mb-3" key={idx}>
-                <div className="card text-center">
-                  <div className="card-body">
-                    <h5 className="card-title">{title}</h5>
-                    <p className="card-text fs-3">{value}</p>
-                  </div>
-                </div>
+              <div className="dash-card" key={idx}>
+                <h5 className="dash-card-title">{title}</h5>
+                <p className="dash-card-value">{value}</p>
               </div>
             );
           }
