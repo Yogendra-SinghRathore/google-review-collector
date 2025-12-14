@@ -193,8 +193,9 @@
 
 /* Toast (we kept your class name and behavior) */
 .toast-confirmation{
+  height: fit-content;
   position: fixed;
-  bottom: 18px;
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--success);
