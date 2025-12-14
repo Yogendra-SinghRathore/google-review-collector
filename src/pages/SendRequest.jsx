@@ -114,7 +114,7 @@ function SendRequest() {
     const trackedGoogleLink = `https://xpvwpeczbloarigllmra.supabase.co/functions/v1/redirectReview?id=${newRequestId}`;
     const waMessage = message
       ? message
-      : `Hi ${name}, You recently visited\n⭐*${businessName}*⭐,\nplease leave a review for Us 👇 \n${trackedGoogleLink}`;
+      : `Hi ${name}, You recently visited\n*${businessName}*,\nplease leave a review for Us 👇 \n${trackedGoogleLink}`;
     const waLink = `https://wa.me/${finalPhone}?text=${encodeURIComponent(
       waMessage
     )}`; 
