@@ -59,9 +59,10 @@ function SendRequest() {
   useEffect(() => {
     const text = message
       ? message
-      : `Hi ${name || "[Customer Name]"}, please leave a review for\n${
+      : `Hi ${name || "[Customer Name]"}, You recently visited\n${
           businessName || "[Business Name]"
-        }\n${businessLink || "https://your-default-review-link.com"}`;
+        }\n please leave a review for Us 👇\n
+        ${businessLink || "https://your-default-review-link.com"}`;
     setPreviewMessage(text);
   }, [name, message, businessName, businessLink]);
 
