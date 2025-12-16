@@ -57,14 +57,15 @@ function SendRequest() {
 
   // Live preview
   useEffect(() => {
-    const text = message
-      ? message
-      : `Hi ${name || "[Customer Name]"}, You recently visited\n${
-          businessName || "[Business Name]"
-        },please leave a review for Us 👇\n
-        ${businessLink || "https://your-default-review-link.com"}`;
-    setPreviewMessage(text);
-  }, [name, message, businessName, businessLink]);
+  const text = message
+    ? message
+    : `Hi ${name || "[Customer Name]"}, You recently visited
+${businessName || "[Business Name]"}
+Please leave a review for us 👇
+${businessLink || "https://your-default-review-link.com"}`;
+
+  setPreviewMessage(text);
+}, [name, message, businessName, businessLink]);
 
   // Validate input
   const validateForm = () => {
