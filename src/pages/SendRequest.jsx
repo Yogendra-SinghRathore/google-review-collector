@@ -61,8 +61,8 @@ function SendRequest() {
       ? message
       : `Hi ${name || "[Customer Name]"}, You recently visited\n${
           businessName || "[Business Name]"
-        }\n please leave a review for Us 👇\n
-        ${businessLink || "https://your-default-review-link.com"}`;
+        }\n please leave a review for Us 👇
+        \n${businessLink || "https://your-default-review-link.com"}`;
     setPreviewMessage(text);
   }, [name, message, businessName, businessLink]);
 
