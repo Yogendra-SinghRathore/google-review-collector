@@ -2,7 +2,7 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom"; // ✅ NEW
 import { signInWithGoogle } from "../auth";
-import rlogo from "../assets/rlogo1.png";
+import rlogo from "../assets/rlogo1.jpg";
 import "./Home.css";
 
 // ------------------ MARKETING SECTION ------------------

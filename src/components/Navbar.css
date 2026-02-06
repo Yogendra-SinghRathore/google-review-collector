@@ -5,11 +5,14 @@
 }
 
 /* LOGO */
+
 .navbar_logo {
     margin-right: 0.25em;
-    width: 1.2em;
+    width: 3.2em;
     height: auto;
     object-fit: contain;
+    background: #fff;
+    border-radius: 8px;
 }
 
 /* MOBILE LINKS */
@@ -25,7 +28,7 @@
     padding: 0.4em 0.8em;
     font-size: 1em;
     color: #ffffff !important;
-    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* BUSINESS LINK */
@@ -34,6 +37,7 @@
     color: #1EBE5B !important;
     text-decoration: underline;
 }
+
 .business_link:hover {
     color: #159b48 !important;
 }
@@ -56,6 +60,7 @@
     font-size: 1em;
     color: #ffffffcc;
 }
+
 .navbar-dark .navbar-nav .nav-link:hover {
     color: #ffffff !important;
 }
@@ -87,10 +92,12 @@
     background-color: #1EBE5B !important;
     border-color: #1EBE5B !important;
 }
+
 .btn-outline-primary {
     color: #1EBE5B !important;
     border-color: #1EBE5B !important;
 }
+
 .btn-outline-primary:hover {
     background-color: #1EBE5B !important;
     color: #fff !important;

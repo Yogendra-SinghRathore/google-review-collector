@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { signInWithGoogle, signOut } from "../auth";
 import { useState, useEffect } from "react";
-import rlogo from "../assets/rlogo1.png";
+import rlogo from "../assets/relogonobg.png";
 import "./Navbar.css";
 
 function Navbar() {
